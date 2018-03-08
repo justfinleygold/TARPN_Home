@@ -1,0 +1,25 @@
+#install remote desktop on dev nodes
+# on dev only sudo apt-get install xrdp
+
+# To get the com ports 4, 5, and 6 open:
+# tarpn url
+# then enter tarpn.net/fin2016, 
+# tarpn update
+# tarpn test
+# tarpn service start
+
+# commands to run to install what's needed. 
+# Some may already be up-to-date
+sudo apt-get update
+# updates Python. Only needed for dev? IDK.
+sudo apt-get install build-essential python-dev
+# Installs tornado web server
+sudo pip install pyserial tornado multiprocessing
+# Installs serial interface
+sudo apt-get install python-serial python3-serial
+
+# on dev only cd ~/tarpn_home
+# on dev only python -m compileall .
+# run the server. 
+# Need this to run at start-up in the background. 
+python home/pi/tarpn_home/server.pyc

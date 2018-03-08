@@ -1,0 +1,277 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>TARPN Home</title>
+    <audio>
+     <source src="static/tarpn_tone.mp3"></source>
+     <source src="static/tarpn_tone.ogg"></source>
+    </audio>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="static/favicon-32x32.png">
+    <link rel="icon" type="ico" href="static/favicon.ico">
+    <link rel="stylesheet" href="static/w3.css">
+   <style>
+     .w3-theme {color:#fff !important;background-color:#4CAF50 !important}
+     .w3-btn {background-color:#4CAF50;margin-bottom:4px}
+     .w3-code{border-left:4px solid #4CAF50}
+     .myMenu {margin-bottom:150px}
+     body{font-size:14px;line-height:1.3}
+     #txt_chat { width: 100%; height: 100%; min-height: 100px; border: 1px solid #dedede; overflow-y:scroll; font-family:"Courier New",Courier,monospace;font-size:13px;line-height:1.0;white-space:pre-wrap } 
+     #txt_node { width: 100%;  height: 100%; min-height: 100px; border: 1px solid #dedede; overflow-y:scroll; font-family:"Courier New",Courier,monospace;font-size:13px;line-height:1.0;white-space:pre-wrap } 
+     <!-- #txt_monitor { width: 100%; height: 100%; min-height: 100px; border: 1px solid #dedede; overflow-y:scroll; font-family:"Courier New",Courier,monospace;font-size:13px;line-height:1.0;white-space:pre-wrap } -->
+   </style>
+    <script type="text/javascript" src="static/jquery.min.js"></script>
+    <script type="text/javascript" src="static/main.js"></script>
+   </head>
+  <body>
+<!-- Top -->
+   <div class="w3-row w3-white w3-padding w3-hide-small">
+    <div class="w3-half" style="margin:0px 0px 0px 0px"><a href='http://tarpn.net' target="_blank"><img src='static/tarpn_logo.png' alt='TARPN'></a></div>
+    <div class="w3-half w3-wide w3-medium w3-hide-small"><div class="w3-right">TARPN HOME</div></div>
+  </div>
+
+  <div class="w3-btn-bar w3-light-grey w3-padding-tiny">
+    <button class="w3-btn btn-small tablink w3-green" onclick="openTab(event, 'Crowd');">Crowd</button>
+    <button class="w3-btn btn-small tablink w3-light-grey" onclick="openTab(event, 'Node');">Node</button>
+    <!-- <button class="w3-btn btn-small tablink w3-light-grey" onclick="openTab(event, 'Monitor');">Monitor</button> -->
+</div>
+<!-- Main content -->
+  <div id="topDiv" class=" w3-container"> 
+   <div id="greyPanel" class="w3-container w3-section w3-padding-small w3-card-4 w3-light-grey">
+     <div id="Crowd" class="w3-container w3-padding-tiny tarpnTab">
+      <form id="ChatForm">
+         <label class="w3-label w3-padding-tiny">Crowd Traffic</label>
+         <div class="w3-border w3-white w3-padding-tiny" id="txt_chat">
+	     Click Join to connect.If Join is disabled, you are already connected.
+	 </div>
+         <table>
+	 <tr>
+         <td width="80px"><label class="w3-label w3-right">Last Sent:</label></td>
+            <td width="70%"><label class="w3-label" id="lbl_last_chat_sent"></label></td>
+         <td><select class="w3-select w3-border w3-padding-tiny" id="sel_chat_sent" hidden></select></td>
+   	 </tr>
+	 <tr>
+         <td width="80px"><label class="w3-label w3-right">To Send:</label></td>
+         <td width="70%"><input type="text" autocomplete="off" class="w3-input w3-border w3-padding-tiny" id="txt_chat_send"></td>
+	 <td width="30px"><button class="w3-btn w3-round-large w3-padding-tiny" id="btn_chat_send">Send</button></td>
+         <td width="30px"><button class="w3-btn w3-round-large w3-padding-tiny" id="btn_chat_clear">Clear</button></td>
+	 <td width="20px">&nbsp;</td>
+         <td width="30px"><button class="w3-btn w3-round-large w3-padding-tiny" id="btn_chat_join">Join</button></td>
+         <td width="30px"><button class="w3-btn w3-round-large w3-padding-tiny" id="btn_chat_leave">Leave</button></td>
+ 	 <td width="20px">&nbsp;</td>
+         <td width="30px"><button class="w3-btn w3-round-large w3-padding-tiny" id="btn_chat_reconnect">Reconnect</button></td>
+  	 </tr>
+     	 </table>
+       </form>
+      </div> 
+      <div id="Node" class="w3-container w3-padding-tiny tarpnTab" style="display:none">
+      <form id="NodeForm">
+           <label class="w3-label w3-padding-tiny">Node Traffic</label>
+          <div class="w3-border w3-white w3-padding-tiny" id="txt_node">
+	     Welcome to TARPN Home.
+	  </div>
+          <table>
+ 	    <tr>
+            <td width="80px"><label class="w3-label w3-right">Last Sent: </label></td>
+            <td width="70%"><label class="w3-label" id="lbl_last_node_sent"></label></td>
+            <td><select class="w3-select w3-border w3-padding-tiny" id="sel_node_sent" hidden></select></td>
+   	    </tr>
+            <tr>
+            <td width="80px"><label class="w3-label w3-right">To Send:</label></td>
+            <td width="70%"><input type="text" autocomplete="off" class="w3-input w3-border w3-padding-tiny" id="txt_node_send"></td>
+            <td width="30px"><button class="w3-btn w3-round-large w3-padding-tiny" id="btn_node_send">Send</button></td>
+            <td width="30px"><button class="w3-btn w3-round-large w3-padding-tiny" id="btn_node_clear">Clear</button></td>
+            <td width="30px"><button class="w3-btn w3-round-large w3-padding-tiny" id="btn_node_reconnect">Reconnect</button></td>
+      	    </tr>
+     	 </table>
+      </form> 
+      </div>  
+      <!-- <div id="Monitor" class="w3-container w3-padding-tiny tarpnTab" style="display:none"> -->
+      <!--<form id="MonitorForm"> -->
+      <!--     <label class="w3-label w3-padding-tiny">Monitor Traffic</label> -->
+      <!--     <div class="w3-border w3-white w3-padding-tiny" id="txt_monitor"> -->
+    	<!--    All traffic appears here. -->
+    	<!-- </div> -->
+      <!--</form> -->
+      <!--<button class="w3-btn w3-round-large w3-padding-tiny" id="btn_monitor_clear">Clear</button> --> 
+      <!--</div> -->                
+   </div>
+   <div class="w3-hide-small">
+	<table class="w3-table w3-border w3-bordered">
+	<thead><tr class="w3-light-grey"><td>Node</td><td>Call</td><td>Port 1</td><td>Port 2</td><td>Port 3</td><td>Port 4</td></tr></thead>
+	<tr>
+	<td><label class="w3-label" id="lblNode"></label></td>
+	<td><label class="w3-label" id="lblCall"></label></td>
+	<td><label class="w3-label" id="lblPort1"></label></td>
+	<td><label class="w3-label" id="lblPort2"></label></td>
+	<td><label class="w3-label" id="lblPort3"></label></td>
+	<td><label class="w3-label" id="lblPort4"></label></td>
+	</tr>
+	</table>
+   </div>   
+   <footer class="w3-center w3-opacity">
+     <p><nav>
+     <span id="curTime" ></span>
+     <span class="w3-hide-small"><a href="http://tarpn.net/t/packet_radio_networking.html" target="_blank">TARPN</a> |
+     <a href="#" onclick="document.getElementById('about').style.display='block'">About</a> |</span> TARPN Home V1.9
+     <span class="w3-hide-small"> | <a href="mailto:nc4fgfin@gmail.com?Subject=TARPN%20Home">Feedback</a></span>
+     </nav></p>
+   </footer>
+   <div id="about" class="w3-modal">
+    <div class="w3-modal-content">
+      <header class="w3-container w3-green"> 
+        <span onclick="document.getElementById('about').style.display='none'" 
+        class="w3-closebtn">&times;</span>
+        <h3>About TARPN Home</h3>
+      </header>
+      <div class="w3-container">
+        <h4>About TARPN</h4>
+        <p>First and foremost, many thanks to the creator of TARPN: TADD, KA2DEW. His vision, foresight, and commitment 
+        to helping others learn is truly remarkable.</p>
+        <p>TARPN is a great way to learn about all aspects of ham radio, electronics, and computers. Learn more <a href="http://tarpn.net/t/packet_radio_networking.html" target="_blank">here</a>!</p>
+        <h4>TARPN Home</h4>
+        <p>This software is designed as a simple and useful interface to a TARPN node. It's 3 tabs each have a separate 
+        connection to the node, so you can use them independently. It should run in ANY browser running on the same 
+        Wi-fi as your node. Just enter the local ip address (ex: 192.168.x.xxx) of your node followed by :8085</p>
+        <p>The Node tab lets you enter node user commands. The Crowd tab lets you join the group chat. 
+        The Monitor tab lets you monitor node activity. All 3 tabs operate independently.</p>
+        <ul class="w3-ul w3-small">
+        <li><h4>Features</h4></li>
+        <li> -> Connect from any computer, phone, or tablet through Wi-fi</li>
+        <li> -> Shows traffic on all connected devices automatically</li>
+        <li> -> Beeps if crowd messages arrive after 5 minutes of inactivity</li>
+        <li> -> Beeps if crowd messages arrive and window is not focused</li>
+        <li> -> Maintains connection to the node even when web clients are gone</li>
+        </ul>
+        <ul class="w3-ul w3-small">
+        <li><h4>Current Bugs (unanticipated features)</h4></li>
+        <li> -> iPhone beep doesn't work yet</li>
+        </ul>
+        <ul class="w3-ul w3-small">
+        <li><h4>Change Log</h4></li>
+        <li> Version 1.0 (2/13/17):</li>
+	<li> -> Initial goodness</li>
+        <li> Version 1.2 (3/11/17):</li>
+	<li> -> Background keep-alive for Node and Crowd tabs</li>
+	<li> -> Reconnect button on Node and Crowd tabs</li>
+	<li> -> Removed Monitor tab until it works again</li>
+	<li> -> Fixed node tab CR issue</li>
+	<li> -> Added footer clock because I like it</li>
+        <li> Version 1.3 (3/12/17):</li>
+	<li> -> Fixed Crowd Keepalive to be invisible</li>
+        <li> Version 1.4 (5/8/17):</li>
+	<li> -> Fixed dependency on a router WAN connection</li>
+	<li> -> Made clicking on the logo open a new page showing TARPN web</li>
+        <li> Version 1.5 (7/24/17):</li>
+	<li> -> Read Node.ini for call sign and other vars. Used it to fix crowd keepalive</li>
+	<li> -> Added Info grid under main panels</li>
+	<li> -> Auto-resize text height as screen size changes</li>
+        <li> -> Crowd connection tracking</li>
+        <li> -> Store and retrieve chat history of the last 2000 chars when you connect with a browser</li>
+        <li> -> Colorize text based on source node/call (like bpqterm)</li>
+        <li> Version 1.6 (7/30/17):</li>
+        <li> -> Fixed color so it doesn't stop at 124 chars</li>
+        <li> -> Made crowd the first tab and turned off crowd echo</li>
+        <li> -> Added crowd and node sent boxes</li>
+        <li> -> Up arrow recalls previous commands</li>
+        <li> Version 1.7 (8/24/17):</li>
+        <li> -> Enabled Raspbian Stretch support</li>
+        <li> -> Tried to make colors bolder</li>
+        <li> -> Enabled hyperlinks in text</li>
+        <li> -> Moved Sent box up</li>
+        <li> Version 1.8 (9/30/17):</li>
+        <li> -> Changed sent box to a label</li>
+        <li> -> Changed Crowd keepalive</li>
+        <li> Version 1.9 (10/30/17):</li>
+        <li> -> Reverted Crowd keepalive</li>
+	</ul>
+        <ul class="w3-ul w3-small">
+        <li><h4>Future plans</h4></li>
+        <li>Version 2</li>
+        <li> -> Drop-down commands so you don't have to remember them</li>
+        <li> -> Auto-recover from serial failures</li>
+        <li> -> Smart knowledge of other nodes (including a map)</li>
+        <li> -> Click on another node to connect to it</li>
+        <li> -> Other node connection tracking</li>
+        <li> -> Save the universe</li>
+    	</ul>
+        <h4>Updates</h4>
+        <p>TARPN Home software is developed by Fin, NC4FG as a lesson in Python, serial, websockets, 
+        Javascript, Jquery, and frustration. It is open source and all code is in Python, HTML, 
+        and Javascript. That means it is all readable and changeable on your node. But don't!
+        To make sure changes are effective and shared, I request that only one person modify and update it. 
+        Please send all comments, bug reports, and change requests to me at he feedback link on the main page.
+        I'll keep a list, prioritize, and ignore apropriately. Naw.</p>
+        <p>Also, wherever you go, well then there you are. But home is where the heart is.</p>
+	<p>73, Fin, NC4FG</p>
+  </div>
+      <footer class="w3-container w3-green">
+        <a href="http://tarpn.net/t/packet_radio_networking.html" target="_blank">TARPN WEB</a>
+      </footer>
+    </div>
+  </div>
+<!-- END MAIN -->
+</div>
+
+<button class="w3-btn w3-round-large w3-hover-white w3-padding-tiny" id="btnShutdown">Close App Server</button>
+<script>
+
+function resizeDivs(){
+    if ($(window).height() > 450) {
+	$("#topDiv").height( ($(window).height()-110) );
+	$("#greyPanel").height( ($("#topDiv").height()-160) );
+	$("#Node").height( ($("#greyPanel").height()-10) );
+	$("#txt_node").height( ($("#Node").height()-75) );
+	$("#Crowd").height( ($("#greyPanel").height()-10) );
+	$("#txt_chat").height( ($("#Crowd").height()-75) );
+    }
+}
+
+window.onload = resizeDivs;
+window.onresize = resizeDivs;
+
+function openTab(evt, tabName) {
+  var i, x, tablinks, textarea, myInput;
+  x = document.getElementsByClassName("tarpnTab");
+  for (i = 0; i < x.length; i++) {
+      x[i].style.display = "none";  // hide all tabs
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < x.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" w3-green", " w3-light-grey");
+  }
+  document.getElementById(tabName).style.display = "block"; //show the current tab
+  // scroll to bottom
+  if(tabName == "Node") {
+  	textarea = document.getElementById('txt_node');
+        myInput = document.getElementById('txt_node_send')
+  }
+  else if (tabName == "Crowd") {
+	textarea = document.getElementById('txt_chat');
+        myInput = document.getElementById('txt_chat_send')
+  }
+  else {
+ 	textarea = document.getElementById('txt_monitor');
+        myInput = document.getElementById('txt_mon_send')
+  }
+  textarea.scrollTop = textarea.scrollHeight;
+  myInput.focus();
+  evt.currentTarget.className = evt.currentTarget.className.replace(" w3-light-grey"," w3-green");
+}
+// Get the modal
+var modal = document.getElementById('about');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+var clockVar = setInterval(clockTimer ,1000); // 1 sec
+function clockTimer() {
+    var datCurTime = new Date();
+     document.getElementById("curTime").innerHTML = datCurTime.toLocaleTimeString() + " |";
+}
+</script>
+</body>
+</html>
