@@ -15,6 +15,7 @@ socket.onmessage = function (message) {
    var datLastTimeReceived; 
    var datCurTimeReceived; 
    var intAudioTimeOut = 300000; // for audio tone. default of 5 minutes
+   var textarea;
    //console.log("Received: " + message.data)
    if (message.data.charAt(0) == "^") {
 	// ^ in first character denotes passing in data rather than text
@@ -37,14 +38,15 @@ socket.onmessage = function (message) {
 	else if (objVars.ChatConnected == "1") {
 	    document.getElementById('btn_chat_join').disabled = true;
 	    document.getElementById('btn_chat_leave').disabled = false;
-	}	
-
+	}
    } else if (message.data.charAt(0) == "`") {
- 	// ` in first character denotes passing in crowd text history
+ 	// ` in first character denotes passing in chat text history
 	var strVars = message.data.substring(1,message.data.length);
 	var objVars = JSON.parse(strVars);
-	document.getElementById('txt_chat').innerHTML = objVars.ChatHistory
-	
+	textarea = document.getElementById('txt_chat');
+        textarea.innerHTML = objVars.ChatHistory;
+	// scroll to bottom
+	textarea.scrollTop = textarea.scrollHeight;	
 //   } else if (message.data.charAt(0) == "!") {
 //        // ! in first character denotes monitor text
 //	txt_monitor.append(message.data.substring(1));
@@ -54,7 +56,7 @@ socket.onmessage = function (message) {
 //	}  
      	
  	// scroll to bottom
-//   	var textarea = document.getElementById('txt_monitor');
+//   	textarea = document.getElementById('txt_monitor');
 //	textarea.scrollTop = textarea.scrollHeight;
    } else if (message.data.charAt(0) == "@") {
         // @ in first character denotes chat command
@@ -79,7 +81,7 @@ socket.onmessage = function (message) {
 	}  
         
   	// scroll to bottom
-   	var textarea = document.getElementById('txt_chat');
+   	textarea = document.getElementById('txt_chat');
 	textarea.scrollTop = textarea.scrollHeight;
     //} else if (message.data.charAt(0) == ":") {
     //    // : denotes shell command
@@ -95,7 +97,7 @@ socket.onmessage = function (message) {
 	}  
  	
    	// scroll to bottom
-   	var textarea = document.getElementById('txt_node');
+   	textarea = document.getElementById('txt_node');
 	textarea.scrollTop = textarea.scrollHeight;
    }
 };
