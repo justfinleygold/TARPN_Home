@@ -34,7 +34,7 @@ hidden_output_queue = multiprocessing.Queue()
 
 datLastNodeClientSend = time.time() # current time
 datLastChatClientSend = time.time() # current time
-datLastChatKeepAlive = datLastChatClientSend
+datLastChatKeepAlive = time.time() # current time
 blTrapResponse = 0
 blChatConnected = 0 
 blChatIsAlive = 0
@@ -218,6 +218,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def on_message(self, message):
         global datLastNodeClientSend
         global datLastChatClientSend
+        global datLastChatKeepAlive
         global blDebugFlag
         
         if (blDebugFlag):
@@ -371,7 +372,7 @@ def checkQueue():
             message = ''
             blCheckChatPort = 0 # Turn off a possible check
             if (blDebugFlag):
-            	print('Ate manual keepalive at ' + time.strftime('%I:%M %p',time.localtime()) )
+            	   print('Ate manual keepalive at ' + time.strftime('%I:%M %p',time.localtime()) )
         else:
             intFirstChar = 0
             if ((message[0] == '\x1B') and (strChatColor == '')):
@@ -431,6 +432,15 @@ def checkQueue():
             for c in clients:
                 c.write_message('@' + message)            
 
+            if ((message[-4:] == 'cmd:') or (message[-28:] == 'Enter ? for command list<br>')):
+                blChatConnected = 0
+                if (blDebugFlag):
+                    print ('Chat got ' + repr(message) + ' at ' + time.strftime('%I:%M %p',time.localtime()))
+                strJSONVars = json.dumps({'ChatConnected': blChatConnected,'ChatIsAlive': blChatIsAlive})
+                for c in clients:
+                    c.write_message('~' + strJSONVars)
+                    c.write_message('@<br>You are not in Crowd. Try clicking Join.<br>')
+
             # save chat text to pass to client when needed
             if (blChatConnected == 1):
                 # save to log
@@ -470,14 +480,14 @@ def checkQueue():
             c.write_message('~' + strJSONVars)
             c.write_message('@<br><span style=\"color:#8B0000;font-weight:bold\">Showing chat port problems at ' + time.strftime('%I:%M %p',time.localtime()) + '! Try Reconnect</span><br>')
     
-#    if datCurDate < date.today():
-#        datCurDate = date.today()
-#        strNewDay = date.strftime("%A, %B %d %Y",date.localtime())
-#        # add day welcome to all clients
-#        for c in clients:
-#            c.write_message('Welcome to ' + strNewDay) # to node pane
-#            c.write_message('@Welcome to ' + strNewDay) # to crowd pane
-            
+    if datCurDate < date.today():
+        datCurDate = date.today()
+        strNewDay = date.strftime("%A, %B %d %Y",date.localtime())
+        # add day welcome to all clients
+        for c in clients:
+            c.write_message('Welcome to ' + strNewDay) # to node pane
+            c.write_message('@Welcome to ' + strNewDay) # to crowd pane
+           
     if not os.path.exists('remove_me_to_stop_server.txt'):
 	## file is not there, so stop the server
         print ('Closing TARPN Home server')
