@@ -468,7 +468,6 @@ def checkQueue():
         datLastChatClientSend = time.time() # current time
         datLastChatKeepAlive = datLastChatClientSend
         chat_input_queue.put('^^TARPN Home works great!^^')
-        print ('Sent long keepalive at ' + time.strftime('%I:%M %p',time.localtime()))
         
     if ((blChatIsAlive == 1) and (blChatConnected == 1) and (blCheckChatPort == 1) and (time.time() - datLastChatClientSend > 60)):
         ## no lifesign 1 minute after keepalive, so send notice to clients
