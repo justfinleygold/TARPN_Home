@@ -5,6 +5,7 @@ import tornado.websocket
 import tornado.gen
 from tornado.options import define, options
 import os
+from datetime import date
 import time
 import re
 import ConfigParser
@@ -13,6 +14,7 @@ import multiprocessing
 import serialworker
 import json
 import sys
+import getpass  # to get logged in user
 from subprocess import Popen, PIPE
 
 import socket
@@ -21,27 +23,32 @@ define('port', default=8085, help='run on the given port', type=int)
  
 clients = [] 
 
-input_queue = multiprocessing.Queue()
-output_queue = multiprocessing.Queue()
-
-monitor_input_queue = multiprocessing.Queue()
-monitor_output_queue = multiprocessing.Queue()
+node_input_queue = multiprocessing.Queue()
+node_output_queue = multiprocessing.Queue()
 
 chat_input_queue = multiprocessing.Queue()
 chat_output_queue = multiprocessing.Queue()
 
+hidden_input_queue = multiprocessing.Queue()
+hidden_output_queue = multiprocessing.Queue()
+
 datLastNodeClientSend = time.time() # current time
-datLastCrowdClientSend = time.time() # current time
+datLastChatClientSend = time.time() # current time
+datLastChatKeepAlive = datLastChatClientSend
 blTrapResponse = 0
-blChatConnected = 0
-strChatHistory = ''
-blChatBRFlag = 0
-blNodeBRFlag = 0
+blChatConnected = 0 
+blChatIsAlive = 0
+blCheckChatPort = 0
+blNodeisAlive = 0 
+blChatAvailable = 0 
+intChatAlertLevel = 2 # 0 = none, 1 = unfocused, 2 = 5 minutes, 3 every message
+blChatBRFlag = 0 
+blNodeBRFlag = 0 
 strChatColor = ''
 blDebugFlag = 0
+datCurDate = date.today()
+strIniFile = '/home/pi/TARPN_Home.ini'
 
-global strCallSign
-global strJSON
 dicColour = {'1b':'#000000', #black
              '1':'#FF00FF',  #fuchsia
              '2':'#4169E1',  #royal blue
@@ -54,6 +61,13 @@ dicColour = {'1b':'#000000', #black
              '9':'#00008B',  #dark blue
              '10':'#006400'  #dark green
             }
+if getpass.getuser() == 'pi':
+    strDir = '/home/pi'
+else:
+    strDir = '/var/log'
+strChatLogFile = strDir + '/TARPN_Home_Chat.log'
+strChatLogRawFile = strDir + '/TARPN_Home_Chat_Raw.log'
+strNodeLogFile = strDir + '/TARPN_Home_Node.log'
 
 if os.path.isfile('/home/pi/tarpn-home-colors.json'):
     dicColour = json.load(open('/home/pi/tarpn-home-colors.json','r'))
@@ -87,8 +101,27 @@ if strPortFlag == 'ENABLE':
 else:
     strPort4 = ''
 
-# build a JSON string from ini variables
-strJSON = json.dumps({'NodeCall': strNodeCall, 'NodeName': strNodeName, 'CallSign': strCallSign, 'Port1': strPort1, 'Port2': strPort2, 'Port3': strPort3, 'Port4': strPort4})
+# build a JSON string from node.ini variables for the Node
+strNodeJSON = json.dumps({'NodeCall': strNodeCall, 'NodeName': strNodeName, 'CallSign': strCallSign, 'Port1': strPort1, 'Port2': strPort2, 'Port3': strPort3, 'Port4': strPort4})
+
+# Read TARPN Home Ini File
+config = ConfigParser.ConfigParser()
+if not os.path.exists(strIniFile):
+    # build and save new ini entries
+    config.add_section("Chat")
+    config.set("Chat", "AlertLevel", "2")
+    config.set("Chat", "ChatHop01", "")
+    config.set("Chat", "ChatHop02", "")
+    config.set("Chat", "ChatHop03", "")
+    config.set("Chat", "ChatHop04", "")
+
+    with open(strIniFile, "wb") as config_file:
+        config.write(config_file)        
+else:
+    config.read(strIniFile)
+
+# read values from the TARPN Home ini file
+intChatAlertLevel = config.get("Chat", "AlertLevel")
 
 def left(s, amount = 1):
     if (len(s) > amount):
@@ -101,7 +134,19 @@ def right(s, amount = 1):
         return s[-amount:]
     else:
         return s
-    
+
+def readChatLog():
+    # read chat log
+    strLocalText = ""
+    if os.path.exists(strChatLogFile):
+        f = open(strChatLogFile, "r")
+        strLocalText = f.read()
+        strLocalText = right(strLocalText, 4000) # only the last 4000 characters
+        strLocalText = strLocalText.replace('\r\n','<br>')
+        strLocalText = json.dumps({'ChatHistory': strLocalText})
+        f.close()
+    return strLocalText
+
 class IndexHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('index.html')
@@ -109,7 +154,7 @@ class IndexHandler(tornado.web.RequestHandler):
 class StaticFileHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('main.js')
- 
+       
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def open(self):
         print ('New connection')
@@ -117,13 +162,16 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         clients.append(self)
         time.sleep(1)
         ## passing in data rather than text
-        self.write_message('^' + strJSON)
+        self.write_message('^' + strNodeJSON)
 
-        strJSONVars = json.dumps({'ChatConnected': blChatConnected})
+        strJSONVars = json.dumps({'ChatConnected': blChatConnected,'ChatAlive': blChatIsAlive})
         self.write_message('~' + strJSONVars)
 
-        strJSONVars = json.dumps({'ChatHistory': strChatHistory})
-        self.write_message('`' + strJSONVars)
+        # read chat log
+        strChatLog = readChatLog()
+        if strChatLog != '':
+            self.write_message('`' + strChatLog)
+            strChatLog = ''
 
         self.write_message('Connected to node ' + strNodeName + '<br>')
  
@@ -137,19 +185,19 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             c.write_message('Server shutting down. Bye. Refresh the page to re-connect.')
         
         ## shutdown node worker
-        input_queue.put('\03')
+        node_input_queue.put('\03')
         time.sleep(1)
-        input_queue.put('D')
+        node_input_queue.put('D')
         time.sleep(1)
         sp.close()
         
         ## shutdown monitor worker
         time.sleep(1)
-        #monitor_input_queue.put('\03')
-        #time.sleep(1)
-        #monitor_input_queue.put('D')
-        #time.sleep(1)
-        sp_mon.close()
+        hidden_input_queue.put('\03')
+        time.sleep(1)
+        hidden_input_queue.put('D')
+        time.sleep(1)
+        sp_hidden.close()
         time.sleep(1)
         
         ## shutdown chat worker
@@ -169,7 +217,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         global datLastNodeClientSend
-        global datLastCrowdClientSend
+        global datLastChatClientSend
         global blDebugFlag
         
         if (blDebugFlag):
@@ -186,14 +234,14 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                     else:
                         blDebugFlag = 0
                         self.write_message('Debug mode OFF, Logging ends.<br>')
-            elif (message == 'RECONNECT!'):
+            elif (message == 'RECONNECT!'): ## reconnect node pane
                 time.sleep(1)
-                input_queue.put('\03')
+                node_input_queue.put('\03')
                 time.sleep(1)
-                input_queue.put('D')
+                node_input_queue.put('D')
                 time.sleep(1)
-                input_queue.put('C SWITCH') 
-            elif (message == '@RECONNECT!'):
+                node_input_queue.put('C SWITCH') 
+            elif (message == '@RECONNECT!'): ## reconnect chat pane
                 time.sleep(1)
                 chat_input_queue.put('/B')
                 time.sleep(1)
@@ -214,28 +262,52 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                 self.write_message(':' + out)
             elif (message[0] == '@'):
                 # @ denotes a chat command
-                datLastCrowdClientSend = time.time() # current time
+                datLastChatClientSend = time.time() # current time
+                datLastChatKeepAlive = datLastChatClientSend
                 cmd_msg = message[1:]
                 chat_input_queue.put(cmd_msg)
+            elif (message[0] == '`'):
+                # ` denotes a mail command
+                datLastMailClientSend = time.time() # current time
+                cmd_msg = message[1:]
+                mail_input_queue.put(cmd_msg)
             else:
+                # defaults to a node command
                 datLastNodeClientSend = time.time() # current time
-                input_queue.put(message)
+                node_input_queue.put(message)
       	    
 ## check the serial queues for pending messages, and relay that to all connected clients
 def checkQueue():
+    global datCurDate
     global datLastNodeClientSend
-    global datLastCrowdClientSend
+    global datLastChatClientSend
+    global datLastChatKeepAlive
     global blTrapResponse
-    global blChatConnected
-    global strChatHistory
-    global blNodeBRFlag
-    global blChatBRFlag
+    global blChatConnected # connected to chat
+    global blCheckChatPort
+    global blChatIsAlive # chat lifesign
+    global blNodeisAlive # node lifesign
+    global blChatAvailable # local user is available or not
+    global intChatAlertLevel # 0 = none, 1 = unfocused, 2 = 5 minutes, 3 every message
+    global blChatBRFlag # whether a BR is needed before next text
+    global blNodeBRFlag # whether a BR is needed before next text
     global strChatColor
-    global dicColour
     global blDebugFlag
+    global strIniFile
+    global strChatLogFile
+    global strChatLogRawFile
+    global strNodeLogFile
+    global strCallSign
+    global strJSON
     
-    if not output_queue.empty():
-        message = output_queue.get()
+    if not node_output_queue.empty():
+        blNodeIsAlive = 1 # good lifesign
+        message = node_output_queue.get()
+        # Add to  log
+        f = open(strNodeLogFile, "a+")
+        f.write(time.strftime('%a, %b %d %Y %I:%M %p',time.localtime()) + ': ' + message)
+        f.close()
+
         if ((message != '') and (message[0:len(message)-2] == ' ')):
             ## eat the keepalive message of a single space
             message = ''
@@ -243,7 +315,7 @@ def checkQueue():
         ##if ((message != '')
 	##      and (message[0:15] == '*** DISCONNECTED')):
         ##Try to reconnect
-        ##   input_queue.put('c switch')
+        ##   node_input_queue.put('c switch')
         ##elif ((message != '')
 	##      and (message[0:22] != '*** CONNECTED to SWITCH')
         ##      and (message[0:7] != 'c switch')
@@ -276,15 +348,30 @@ def checkQueue():
     #       c.write_message('!' + message)            
     elif not chat_output_queue.empty():
         message = chat_output_queue.get()
+        blChatIsAlive = 1 # good lifesign
         if (blDebugFlag):
-            print(repr('From crowd serial: ' + message))
+            print(repr('From chat serial: ' + message))
+        # Add to raw chat log
+        f = open(strChatLogRawFile, "a+")
+        f.write(time.strftime('%a, %b %d %Y %I:%M %p',time.localtime()) + ': ' + message)
+        f.close()
+        
         if ((message == '') or (message[0:len(message)-2] == '')):
             ## eat empty message
             message = '' 
-        elif (message[len(message)-13:len(message)-2] == 'Keepalive!!'):
-#        elif (message[len(message)-len('^^TARPN Home works great!^^')-2:len(message)-2] == '^^TARPN Home works great!^^'):
+        elif ('Keepalive!!' in message):
             ## eat the keepalive message
             message = ''
+            blCheckChatPort = 0 # Turn off a possible check
+            if (blDebugFlag):
+                print('Ate chat keepalive at ' + time.strftime('%I:%M %p',time.localtime()) )
+ 
+        elif (message[len(message)-len('^^TARPN Home works great!^^')-2:len(message)-2] == '^^TARPN Home works great!^^'):
+            ## eat the keepalive message
+            message = ''
+            blCheckChatPort = 0 # Turn off a possible check
+            if (blDebugFlag):
+            	print('Ate manual keepalive at ' + time.strftime('%I:%M %p',time.localtime()) )
         else:
             intFirstChar = 0
             if ((message[0] == '\x1B') and (strChatColor == '')):
@@ -311,15 +398,17 @@ def checkQueue():
 
             message = message[intFirstChar:].replace('\r\n','<br>')
 
-            # Track crowd connection and pass state to clients
+            # Track chat connection and pass state to clients
             if ((message != '') and (message[0:16] == 'Returned to Node')):
                 blChatConnected = 0
-                strJSONVars = json.dumps({'ChatConnected': blChatConnected})
+                if (blDebugFlag):
+                    print ('Chat returned to node at ' + time.strftime('%I:%M %p',time.localtime()))
+                strJSONVars = json.dumps({'ChatConnected': blChatConnected,'ChatIsAlive': blChatIsAlive})
                 for c in clients:
                     c.write_message('~' + strJSONVars)
             elif ((message != '') and (message[0:15] == '[BPQChatServer-')):
                 blChatConnected = 1
-                strJSONVars = json.dumps({'ChatConnected': blChatConnected})
+                strJSONVars = json.dumps({'ChatConnected': blChatConnected,'ChatIsAlive': blChatIsAlive})
                 for c in clients:
                     c.write_message('~' + strJSONVars)
 
@@ -338,26 +427,57 @@ def checkQueue():
 
             if (blDebugFlag):
                 message = message + '(debug)'
-                print(repr('To crowd web: ' + message))
+                print(repr('To chat web: ' + message))
             for c in clients:
                 c.write_message('@' + message)            
 
             # save chat text to pass to client when needed
             if (blChatConnected == 1):
-                strChatHistory = strChatHistory + message
-                if len(strChatHistory) > 2000:
-                    strChatHistory = strChatHistory[-2000:]
+                # save to log
+                f = open(strChatLogFile, "a+")
+                f.write(message.replace('<br>','\r\n'))
+                f.close()
+                
+                #strChatHistory = strChatHistory + message
+                #if len(strChatHistory) > 4000:
+                #    strChatHistory = strChatHistory[-4000:]
                                 
     if time.time() - datLastNodeClientSend > 1200:
         ## greater then 20 minutes, so send keepalive to node port
         datLastNodeClientSend = time.time() # current time
-        input_queue.put(' ') # just a space!
+        node_input_queue.put(' ') # just a space!
 
-    if time.time() - datLastCrowdClientSend > 1200:
-        ## greater then 20 minutes, so send keepalive to crowd port
-        datLastCrowdClientSend = time.time() # current time
+    if ((blChatIsAlive == 1) and (blChatConnected == 1) and (time.time() - datLastChatClientSend > 1200)):
+        ## greater then 20 minutes, so send keepalive to chat port
+        datLastChatClientSend = time.time() # current time
         chat_input_queue.put('/S ' + strCallSign + ' Keepalive!!')
+        blCheckChatPort = 1 # prep for lifesign check
+
+    if ((blChatIsAlive == 1) and (blChatConnected == 1) and (time.time() - datLastChatKeepAlive > 6000)):
+        ## greater then 100 minutes, so send keepalive to chat port
+        datLastChatClientSend = time.time() # current time
+        datLastChatKeepAlive = datLastChatClientSend
+        chat_input_queue.put('^^TARPN Home works great!^^')
         
+    if ((blChatIsAlive == 1) and (blChatConnected == 1) and (blCheckChatPort == 1) and (time.time() - datLastChatClientSend > 60)):
+        ## no lifesign 1 minute after keepalive, so send notice to clients
+        print ('Warning: chat port inoperative at ' + time.strftime('%I:%M %p',time.localtime()))
+        blChatIsAlive = 0
+        blChatConnected = 0
+        blCheckChatPort = 0
+        strJSONVars = json.dumps({'ChatConnected': blChatConnected,'ChatIsAlive': blChatIsAlive})
+        for c in clients:
+            c.write_message('~' + strJSONVars)
+            c.write_message('@<br><span style=\"color:#8B0000;font-weight:bold\">Showing chat port problems at ' + time.strftime('%I:%M %p',time.localtime()) + '! Try Reconnect</span><br>')
+    
+#    if datCurDate < date.today():
+#        datCurDate = date.today()
+#        strNewDay = date.strftime("%A, %B %d %Y",date.localtime())
+#        # add day welcome to all clients
+#        for c in clients:
+#            c.write_message('Welcome to ' + strNewDay) # to node pane
+#            c.write_message('@Welcome to ' + strNewDay) # to crowd pane
+            
     if not os.path.exists('remove_me_to_stop_server.txt'):
 	## file is not there, so stop the server
         print ('Closing TARPN Home server')
@@ -365,20 +485,20 @@ def checkQueue():
             c.write_message('Server shutting down. Bye. Refresh the page to re-connect.')
         
         ## shutdown node worker
-        input_queue.put('\03')
+        node_input_queue.put('\03')
         time.sleep(1)
-        input_queue.put('D')
+        node_input_queue.put('D')
         time.sleep(1)
         sp.close()
         
-        ## shutdown monitor worker
+        ## shutdown hidden worker
         time.sleep(1)
-        #monitor_input_queue.put('JHOST0\r')
-        #monitor_input_queue.put('\03')
+        #hidden_input_queue.put('JHOST0\r')
+        #hidden_input_queue.put('\03')
         #time.sleep(1)
-        #monitor_input_queue.put('D')
+        #hidden_input_queue.put('D')
         #time.sleep(1)
-        sp_mon.close()
+        sp_hidden.close()
         time.sleep(1)
         
         ## shutdown chat worker
@@ -391,10 +511,10 @@ def checkQueue():
         time.sleep(1)
         
         ## close websockets and get out
-        input_queue.close()
-        output_queue.close()
-        monitor_input_queue.close()
-        monitor_output_queue.close()
+        node_input_queue.close()
+        node_output_queue.close()
+        hidden_input_queue.close()
+        hidden_output_queue.close()
         chat_input_queue.close()
         chat_output_queue.close()
 
@@ -403,33 +523,35 @@ def checkQueue():
       
 if __name__ == '__main__':
     keepRunning = True
+     
     ## start the serial worker in background (as a deamon)
-    sp = serialworker.SerialProcess(input_queue, output_queue, 4) ## port 4 for node commands
+    sp = serialworker.SerialProcess(node_input_queue, node_output_queue, 4) ## port 4 for node commands
     sp.daemon = True
     sp.start()
     
     ## wait a second before sending first input
     time.sleep(1)
-    input_queue.put('conok')
-    input_queue.put('echo on')
-    input_queue.put('autolf on')
-    input_queue.put('mon off') ## always off
+    node_input_queue.put('conok')
+    node_input_queue.put('echo on')
+    node_input_queue.put('autolf on')
+    node_input_queue.put('mon off') ## always off
     time.sleep(2)
-    input_queue.put('c switch')
+    node_input_queue.put('c switch')
+    blNodeIsAlive = 1
     
-    ## start the monitor serial worker in background (as a deamon)
-    sp_mon = serialworker.SerialProcess(monitor_input_queue, monitor_output_queue, 5) ## port 5 for monitor
-    sp_mon.daemon = True
-    sp_mon.start()
+    ## start the hidden serial worker in background (as a deamon)
+    sp_hidden = serialworker.SerialProcess(hidden_input_queue, hidden_output_queue, 5) ## port 5 for hidden commands
+    sp_hidden.daemon = True
+    sp_hidden.start()
      
     ## wait a second before sending first input
     #time.sleep(1)
-    #monitor_input_queue.put('\x11\x18\x1BJHOST1\r')
-    #monitor_input_queue.put('conok')
-    #monitor_input_queue.put('echo off')
-    #monitor_input_queue.put('autolf on')
-    #monitor_input_queue.put('mon on') ## always on
-    #monitor_input_queue.put('c switch')
+    #hidden_input_queue.put('\x11\x18\x1BJHOST1\r')
+    #hidden_input_queue.put('conok')
+    #hidden_input_queue.put('echo off')
+    #hidden_input_queue.put('autolf on')
+    #hidden_input_queue.put('mon on') ## always on
+    #hidden_input_queue.put('c switch')
 
     ## start the chat serial worker in background (as a deamon)
     sp_chat = serialworker.SerialProcess(chat_input_queue, chat_output_queue, 6) ## port 6 for chat
@@ -443,7 +565,8 @@ if __name__ == '__main__':
     chat_input_queue.put('autolf on')
     chat_input_queue.put('mon off') ## always off
     chat_input_queue.put('c switch')
-
+    blChatIsAlive = 1
+    
     tornado.options.parse_command_line()
           
     app = tornado.web.Application(
@@ -456,12 +579,12 @@ if __name__ == '__main__':
     )    
     httpServer = tornado.httpserver.HTTPServer(app)
     httpServer.listen(options.port)
-    ## print ('Listening on http port:', options.port)
+    ##print ('Listening on http port:', options.port)
 
     print ('Tarpn Home server is running')
-    mainLoop = tornado.ioloop.IOLoop.instance()
+    ##mainLoop = tornado.ioloop.IOLoop.current()
     ## adjust the scheduler_interval according to the frames sent by the serial port
-    scheduler_interval = 100
-    scheduler = tornado.ioloop.PeriodicCallback(checkQueue, scheduler_interval, io_loop = mainLoop)
+    scheduler_interval = 10  ## Check serial every 10 ms
+    scheduler = tornado.ioloop.PeriodicCallback(checkQueue, scheduler_interval)
     scheduler.start()
-    mainLoop.start()
+    tornado.ioloop.IOLoop.current().start()
