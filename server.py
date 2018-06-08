@@ -34,7 +34,7 @@ hidden_output_queue = multiprocessing.Queue()
 
 datLastNodeClientSend = time.time() # current time
 datLastChatClientSend = time.time() # current time
-datLastChatKeepAlive = datLastChatClientSend
+datLastChatKeepAlive = time.time() # current time
 blTrapResponse = 0
 blChatConnected = 0 
 blChatIsAlive = 0
@@ -218,6 +218,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def on_message(self, message):
         global datLastNodeClientSend
         global datLastChatClientSend
+        global datLastChatKeepAlive
         global blDebugFlag
         
         if (blDebugFlag):
@@ -431,14 +432,14 @@ def checkQueue():
             for c in clients:
                 c.write_message('@' + message)            
 
-#            if ((message != '') and ((('cmd:' in message) and ('Eh?' in message)) or ('Invalid command - Enter ? for command list' in message))):
-#                blChatConnected = 0
-#                if (blDebugFlag):
-#                    print ('Chat got Eh? cmd: at ' + time.strftime('%I:%M %p',time.localtime()))
-#                strJSONVars = json.dumps({'ChatConnected': blChatConnected,'ChatIsAlive': blChatIsAlive})
-#                for c in clients:
-#                    c.write_message('~' + strJSONVars)
-#                    c.write_message('@You are not in Crowd. Try clicking Join')
+            if ((message[-4:] == 'cmd:') or (message[-28:] == 'Enter ? for command list<br>')):
+                blChatConnected = 0
+                if (blDebugFlag):
+                    print ('Chat got ' + repr(message) + ' at ' + time.strftime('%I:%M %p',time.localtime()))
+                strJSONVars = json.dumps({'ChatConnected': blChatConnected,'ChatIsAlive': blChatIsAlive})
+                for c in clients:
+                    c.write_message('~' + strJSONVars)
+                    c.write_message('@<br>You are not in Crowd. Try clicking Join.<br>')
 
             # save chat text to pass to client when needed
             if (blChatConnected == 1):
@@ -467,6 +468,7 @@ def checkQueue():
         datLastChatClientSend = time.time() # current time
         datLastChatKeepAlive = datLastChatClientSend
         chat_input_queue.put('^^TARPN Home works great!^^')
+        print ('Sent long keepalive at ' + time.strftime('%I:%M %p',time.localtime()))
         
     if ((blChatIsAlive == 1) and (blChatConnected == 1) and (blCheckChatPort == 1) and (time.time() - datLastChatClientSend > 60)):
         ## no lifesign 1 minute after keepalive, so send notice to clients
