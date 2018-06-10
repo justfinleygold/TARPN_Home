@@ -480,13 +480,14 @@ def checkQueue():
             c.write_message('~' + strJSONVars)
             c.write_message('@<br><span style=\"color:#8B0000;font-weight:bold\">Showing chat port problems at ' + time.strftime('%I:%M %p',time.localtime()) + '! Try Reconnect</span><br>')
     
-    if datCurDate < date.today():
-        datCurDate = date.today()
-        strNewDay = date.strftime("%A, %B %d %Y",date.localtime())
-        # add day welcome to all clients
-        for c in clients:
-            c.write_message('Welcome to ' + strNewDay) # to node pane
-            c.write_message('@Welcome to ' + strNewDay) # to crowd pane
+# this is ready when there is time to test it
+#    if datCurDate < date.today():
+#        datCurDate = date.today()
+#        strNewDay = time.strftime('%A, %B %d %Y',time.localtime())
+#        # add day welcome to all clients
+#        for c in clients:
+#            c.write_message('Welcome to ' + strNewDay + '!') # to node pane
+#            c.write_message('@Welcome to ' + strNewDay + '!') # to crowd pane
            
     if not os.path.exists('remove_me_to_stop_server.txt'):
 	## file is not there, so stop the server
