@@ -1,310 +1,524 @@
 <!DOCTYPE HTML>
 <html>
-  <head>
-    <title>TARPN Home</title>
-    <audio>
-     <source src="static/tarpn_tone.mp3"></source>
-     <source src="static/tarpn_tone.ogg"></source>
-    </audio>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="static/favicon-32x32.png">
-    <link rel="icon" type="ico" href="static/favicon.ico">
-    <link rel="stylesheet" href="static/w3.css">
-   <style>
-     .w3-theme {color:#fff !important;background-color:#4CAF50 !important}
-     .w3-btn {background-color:#4CAF50;margin-bottom:4px}
+
+<head>
+	<title>TARPN Home</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/png" href="static/favicon-32x32.png">
+	<link rel="icon" type="ico" href="static/favicon.ico">
+	<link rel="stylesheet" href="static/w3.css">
+	<link rel="stylesheet" href="static/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css">
+	<style>
+	 .w3-theme {color:#fff !important;background-color:#4CAF50 !important}
+	 .w3-theme-light {color:#fff !important; background-color:#85a3ff !important}
+	 .w3-theme-med {color:#fff !important; background-color:#4775ff !important}
+     .myMainColor {color:#fff!important;background-color:#0033cc!important}
+     .w3-btn {background-color:#0033cc;border-radius: 5px 5px 5px 5px;margin-bottom:4px}
+     .tab-radius {border-radius: 5px 5px 0px 0px;}
      .w3-code{border-left:4px solid #4CAF50}
+     .w3-label{color:#000000}
+	 .hint{color:red}
+	 .highlight {
+        background-color:#99ff9c;
+     }
      .myMenu {margin-bottom:150px}
      .errorText {color: red}
+	 .closebtn {
+  		position: absolute;
+  		top: 0;
+  		right: 5px;
+  		font-size: 20px;
+  		margin-left: 5px;
+	  }
+	  .switch {
+  		position: relative;
+  		display: inline-block;
+		width: 40px;
+		height: 18px;
+	  }
+
+	  .switch input { 
+		opacity: 0;
+		width: 0;
+		height: 0;
+	  }
+
+	  .slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		border-style: solid; 
+		border-width: 1px;
+		border-color: grey;
+		-webkit-transition: .4s;
+		transition: .4s;
+	  }
+
+	  .slider:before {
+		position: absolute;
+		content: "";
+		height: 12px;
+		width: 16px;
+		left: 2px;
+		bottom: 2px;
+		background-color: red;
+		-webkit-transition: .4s;
+		transition: .4s;
+	  }
+
+	  input:checked + .slider:before {
+		-webkit-transform: translateX(18px);
+		-ms-transform: translateX(18px);
+		transform: translateX(18px);
+		background-color: green;
+	  }
+
+	  /* Rounded sliders */
+	  .slider.round {
+		border-radius: 5px;
+	  }
+
+	  .slider.round:before {
+  		border-radius: 20%;
+	  } 
      body{font-size:14px;line-height:1.3}
      #txt_chat { width: 100%; height: 100%; min-height: 100px; border: 1px solid #dedede; overflow-y:scroll; font-family:"Courier New",Courier,monospace;font-size:13px;line-height:1.0;white-space:pre-wrap } 
-     #txt_node { width: 100%;  height: 100%; min-height: 100px; border: 1px solid #dedede; overflow-y:scroll; font-family:"Courier New",Courier,monospace;font-size:13px;line-height:1.0;white-space:pre-wrap } 
-     <!-- #txt_monitor { width: 100%; height: 100%; min-height: 100px; border: 1px solid #dedede; overflow-y:scroll; font-family:"Courier New",Courier,monospace;font-size:13px;line-height:1.0;white-space:pre-wrap } -->
+     #txt_node { width: 100%; height: 100%; min-height: 100px; border: 1px solid #dedede; overflow-y:scroll; font-family:"Courier New",Courier,monospace;font-size:13px;line-height:1.0;white-space:pre-wrap } 
+     #txt_bbs_msg { width: 100%; height: 100%; min-height: 100px; border: 1px solid #dedede; overflow-y:scroll; font-family:"Courier New",Courier,monospace;font-size:13px;line-height:1.0;white-space:pre-wrap } 
+ 	 #txt_info { width: 100%; height: 100%; min-height: 100px; border: 1px solid #dedede; overflow-y:scroll; font-family:"Courier New",Courier,monospace;font-size:13px;line-height:1.0;white-space:pre-wrap }
    </style>
-    <script type="text/javascript" src="static/jquery.min.js"></script>
-    <script type="text/javascript" src="static/main.js"></script>
-   </head>
-  <body>
-<!-- Top -->
-   <div class="w3-row w3-white w3-padding w3-hide-small">
-    <div class="w3-half" style="margin:0px 0px 0px 0px"><a href='http://tarpn.net' target="_blank"><img src='static/tarpn_logo.png' alt='TARPN'></a></div>
-    <div class="w3-half w3-wide w3-medium"><div class="w3-right">TARPN HOME</div></div>
-  </div>
+	<script type="text/javascript" src="static/jquery.min.js"></script>
+	<script type="text/javascript" src="static/main.js"></script>
+	<script type="text/javascript" src="static/DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
+</head>
 
-  <div class="w3-btn-bar w3-light-grey w3-padding-tiny">
-    <button class="w3-btn btn-small tablink w3-green" onclick="openTab(event, 'Crowd');">Crowd</button>
-    <button class="w3-btn btn-small tablink w3-light-grey" onclick="openTab(event, 'Node');">Node</button>
-    <!-- <button class="w3-btn btn-small tablink w3-light-grey" onclick="openTab(event, 'Monitor');">Monitor</button> -->
-</div>
-<!-- Main content -->
-  <div id="topDiv" class="w3-container"> 
-   <div id="greyPanel" class="w3-container w3-section w3-padding-small w3-card-4 w3-light-grey">
-     <div id="Crowd" class="w3-container w3-padding-tiny tarpnTab">
-      <form id="ChatForm">     
-	 <label class="w3-label w3-padding-tiny">Crowd Traffic</label>
-         <div class="w3-border w3-white w3-padding-tiny" id="txt_chat">
-	     Click Join to connect.If Join is disabled, you are already connected.
-	 </div>  
-	<div class="w3-row">
-	    <div class="w3-col w3-label w3-padding-tiny" style="width:85px">Last Sent:</div>
-	    <div class="w3-rest"><label class="w3-label" id="lbl_last_chat_sent"></label>
-		<select class="w3-select w3-border w3-padding-tiny" id="sel_chat_sent" hidden></select>
-	    </div>
+<body>
+	<!-- Top -->
+	<div class="w3-row w3-white w3-padding w3-hide-small">
+		<div class="w3-half" style="margin:0px 0px 0px 0px"><a href='http://tarpn.net' target="_blank"><img src='static/tarpn_logo.png'
+				 alt='TARPN'></a></div>
+		<div class="w3-half w3-wide w3-medium">
+			<div class="w3-right">TARPN HOME</div>
+		</div>
 	</div>
-	
-	<div class="w3-row">
-	    <div class="w3-twothird">
-	      <div class="w3-col w3-label w3-padding-tiny" style="width:85px">To Send:</div>
-	      <div class="w3-rest"><input type="text" autocomplete="off" class="w3-input w3-border w3-padding-tiny" id="txt_chat_send"></div>
-	    </div>
-	    <div class="w3-third w3-padding-tiny">
-	      <div class="w3-col" style="width:10px">&nbsp;</div>
-	      <div class="w3-col" style="width:50px"><button class="w3-btn w3-round-large w3-padding-tiny" id="btn_chat_send">Send</button></div>
-	      <div class="w3-col" style="width:60px"><button class="w3-btn w3-round-large w3-padding-tiny" id="btn_chat_clear">Clear</button></div>  
-	      <div class="w3-col" style="width:40px"><button class="w3-btn w3-round-large w3-padding-tiny" id="btn_chat_join">Join</button></div>
-	      <div class="w3-col" style="width:70px"><button class="w3-btn w3-round-large w3-padding-tiny" id="btn_chat_leave">Leave</button></div>
-	      <div class="w3-col" style="width:60px"><button class="w3-btn w3-round-large w3-padding-tiny" id="btn_chat_reconnect">Reconnect</button></div>
-	    </div>
-      </div>
-       </form>
-      </div> 
-      <div id="Node" class="w3-container w3-padding-tiny tarpnTab" style="display:none">
-       <form id="NodeForm">
-           <label class="w3-label w3-padding-tiny">Node Traffic</label>
-        <div class="w3-border w3-white w3-padding-tiny" id="txt_node">
-	     Welcome to TARPN Home.
+
+	<div class="w3-btn-bar w3-light-grey w3-padding-tiny">
+		<button class="w3-btn tab-radius w3-small tablink myMainColor" id="btn_chat">Chat</button>
+		<button class="w3-btn tab-radius w3-small tablink w3-light-grey" id="btn_node">Node</button>
+		<button class="w3-btn tab-radius w3-small tablink w3-light-grey" id="btn_BBS">BBS</button>
+		<button class="w3-btn tab-radius w3-small tablink w3-light-grey" id="btn_info">Info</button>
+		<div id="mail_notify" class="w3-btn btn-small w3-light-grey w3-right" style="display:none"><span class="w3-badge w3-theme-med w3-margin-left"><label id="mail_count">0</label></span> New Msgs</div>
 	</div>
-	<div class="w3-row">
-	    <div class="w3-col w3-label w3-padding-tiny" style="width:85px">Last Sent:</div>
-	    <div class="w3-rest"><label class="w3-label" id="lbl_last_node_sent"></label>
-		<select class="w3-select w3-border w3-padding-tiny" id="sel_node_sent" hidden></select>
-	    </div>
+	<!-- Main content -->
+	<div id="topDiv" class="w3-container w3-padding-small">
+		<div id="greyPanel" class="w3-container w3-padding-small w3-card-4 w3-light-grey">
+			<div id="Chat" class="w3-container w3-padding-tiny tarpnTab">
+				<div class="w3-row">
+					<label id="lbl_chat_traffic" class=" w3-label w3-col w3-padding-tiny" style="width:250px">Chat Traffic</label>
+					<label id="lbl_chat_hint" class="w3-label hint w3-padding-tiny"></label>
+					<div class="w3-right">
+						<button id="btn_open_sidebar" class="w3-btn w3-padding-tiny w3-right">Chatters</button>
+						<label class="w3-label w3-padding-tiny">SWITCH:
+							<label class="switch"> 
+								<input id="btn_chat_power" type="checkbox" checked>
+								<div class="slider round"></div>
+							</label>
+						</label>&nbsp;
+						<label class="w3-label w3-small w3-padding-tiny" style="cursor:pointer">
+							<input id="chk_mute" type="checkbox" class="w3-small" style="cursor:pointer">
+							Mute
+						</label>&nbsp;
+					</div>
+				</div>
+				<div class="w3-row">
+					<div id="chatSidebar" class="w3-col w3-right" style="display:none;width:215px">
+						<div class="w3-row w3-padding-tiny">
+							<div class="w3-label w3-padding-small w3-theme-med">
+								<div id="btn_close_sidebar" class="w3-button w3-small w3-theme-med w3-padding-tiny w3-right" style="cursor:pointer">&times;</div>
+								<label id="lblChatHead"  class="w3-theme-med w3-padding-tiny">Chatters</label>
+							</div>
+							<div class="w3-padding-tiny w3-border w3-label w3-white" id="txt_chat_status">
+								Not in Chat<br>Click Join below
+							</div>
+						</div>
+						<div class="w3-row w3-padding-tiny">
+							<div class="w3-col" style="width:10px">&nbsp;</div>
+							<div class="w3-col" style="width:85px"><button class="w3-btn w3-padding-tiny" id="btn_chat_away" style="disabled:true">I'm Away</button></div>
+							<div class="w3-col" style="width:70px"><button class="w3-btn w3-padding-tiny" id="btn_chat_return" style="disabled:true">I'm Back</button></div>
+						</div>
+						<div class="w3-padding-tiny" id="txt_sidebar_hint">
+							&nbsp;
+						</div>
+					</div>
+					<div id="chatMiddle" class="w3-rest">
+						<div class="w3-border w3-white w3-padding-tiny w3-label" id="txt_chat">
+							Welcome to TARPN Home Chat.
+						</div>
+					</div>
+					<script type="text/javascript">
+						if (localStorage.getItem('sidebar_open') == "yes") {
+							document.getElementById("chatMiddle").style.marginRight = "220px";
+							document.getElementById("chatSidebar").style.display = "block";
+							document.getElementById("btn_open_sidebar").style.display = 'none';
+						}
+					</script>
+				</div>
+				<div class="w3-row">
+					<div class="w3-col w3-label w3-padding-tiny" style="width:90px">Last Sent:</div>
+					<div class="w3-rest">
+						<label class="w3-label" id="lbl_last_chat_sent"></label>
+						<select class="w3-select w3-border w3-padding-tiny" id="sel_chat_sent" hidden></select>
+					</div>
+				</div>
+				<form id="ChatForm">
+					<div class="w3-row">
+						<div class="w3-twothird">
+							<div class="w3-col w3-label w3-padding-tiny" style="width:90px">To Send:</div>
+							<div class="w3-rest"><input type="text" autocomplete="off" class="w3-input w3-border w3-padding-tiny" id="txt_chat_send"></div>
+						</div>
+						<div class="w3-third w3-padding-tiny">
+							<div class="w3-col" style="width:10px">&nbsp;</div>
+							<div class="w3-col" style="width:50px"><button class="w3-btn w3-padding-tiny" id="btn_chat_send">Send</button></div>
+							<div class="w3-col" style="width:60px"><button class="w3-btn w3-padding-tiny" id="btn_chat_clear">Clear</button></div>
+							<div class="w3-col" style="width:40px"><button class="w3-btn w3-padding-tiny" id="btn_chat_join">Join</button></div>
+							<div class="w3-col" style="width:70px"><button class="w3-btn w3-padding-tiny" id="btn_chat_leave">Leave</button></div>
+						</div>
+					</div>
+					<div id="chat_commands_bar" class="w3-row">
+						<div class="w3-twothird">
+							<div class="w3-col w3-label w3-padding-tiny" style="width:90px">Commands:</div>
+							<div class="w3-rest"><select class="w3-padding-tiny" id="sel_chat_cmds" style="width:100%">></select></div>
+						</div>
+						<div class="w3-third w3-padding-tiny">
+							<div class="w3-col" style="width:10px">&nbsp;</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="Node" class="w3-container w3-padding-tiny tarpnTab" style="display:none">
+				<label class=" w3-label w3-col w3-padding-tiny" style="width:250px">Node Traffic</label>&nbsp
+				<label id="lbl_node_hint" class="w3-label hint w3-padding-tiny"></label>
+				<div class="w3-right">
+					<label class="w3-label w3-padding-tiny">SWITCH:
+						<label class="switch"> 
+							<input id="btn_node_power" type="checkbox" checked>
+							<div class="slider round"></div>
+						</label>
+					</label>					
+					<label class="w3-label w3-small w3-padding-tiny" style="cursor:pointer">
+						<input id="chk_monitor" type="checkbox" class="w3-small " style="cursor:pointer">
+						Monitor
+					</label>&nbsp;
+				</div>
+				<div class="w3-border w3-white w3-padding-tiny" id="txt_node">
+					Welcome to TARPN Home.
+				</div>
+				<div class="w3-row">
+					<div class="w3-col w3-label w3-padding-tiny" style="width:90px">Last Sent:</div>
+					<div class="w3-rest">
+						<label class="w3-label" id="lbl_last_node_sent"></label>
+						<select class="w3-select w3-border w3-padding-tiny" id="sel_node_sent" hidden></select>
+					</div>
+				</div>
+				<form id="NodeForm">
+					<div class="w3-row">
+						<div class="w3-twothird">
+							<div class="w3-col w3-label w3-padding-tiny" style="width:90px">To Send:</div>
+							<div class="w3-rest">
+								<input type="text" autocomplete="off" class="w3-input w3-border w3-padding-tiny" id="txt_node_send">
+							</div>
+						</div>
+						<div class="w3-third  w3-padding-tiny">
+							<div class="w3-col" style="width:10px">&nbsp;</div>
+							<div class="w3-col" style="width:50px"><button class="w3-btn w3-padding-tiny" id="btn_node_send">Send</button></div>
+							<div class="w3-col" style="width:60px"><button class="w3-btn w3-padding-tiny" id="btn_node_clear">Clear</button></div>
+						</div>
+					</div>
+					<div id="node_commands_bar" class="w3-row">
+						<div class="w3-twothird">
+							<div class="w3-col w3-label w3-padding-tiny" style="width:90px">Commands:</div>
+							<div class="w3-rest">
+								<select class="w3-label w3-border w3-padding-tiny" id="sel_node_cmds" style="width:100%"></select>
+							</div>
+						</div>
+						<div class="w3-third w3-padding-tiny">
+							<div class="w3-col" style="width:10px">&nbsp;</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="BBS" class="w3-container w3-padding-tiny tarpnTab" style="display:none">
+				<div class="w3-cell-row">
+					<div class="w3-container w3-cell" style="width:100%">
+						<div class="w3-cell-row" id="btn_bar">
+							<div class="w3-col" style="width:90px"><button class="w3-btn w3-padding-tiny" style="width:80px" id="btn_bbs_compose">Compose</button></div>
+							<div class="w3-col" style="width:90px"><button class="w3-btn w3-padding-tiny" style="width:80px" id="btn_bbs_refresh">Refresh</button></div>
+							<div class="w3-col" style="width:90px"><button class="w3-btn w3-padding-tiny" style="width:80px" id="btn_bbs_delete">Kill</button></div>
+							<div class="w3-col" style="width:90px"><button class="w3-btn w3-padding-tiny" style="width:80px" id="btn_bbs_reply">Reply</button></div>
+							<div class="w3-col" style="width:90px"><button class="w3-btn w3-padding-tiny" style="width:80px" id="btn_bbs_fwd">Forward</button></div>
+						</div>
+						<div class="w3-cell-row">
+							<table id="bbs_msg_list" class="display row_border compact" style="cursor: pointer" width="100%">
+								<thead>
+									<tr>
+										<th>Num</th>
+										<th>Date</th>
+										<th>Type</th>
+										<th>Status</th>
+										<th>Length</th>
+										<th>To</th>
+										<th>At</th>
+										<th>From</th>
+										<th>Subject</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+						<div class="w3-cell-row">
+							<label class="w3-label w3-padding-tiny">Message Content</label>
+						</div>
+						<div class="w3-cell-row">
+							<div class="w3-border w3-white w3-padding-tiny w3-cell" id="txt_bbs_msg"></div>
+						</div>
+					</div>
+				</div>	
+			</div>
+			<div id="Info" class="w3-container w3-padding-tiny tarpnTab" style="display:none">
+				<form id="InfoForm">
+					<div class="w3-row">
+						<label class="w3-label w3-padding-tiny">Node Info for </label>
+						<label class="w3-label" id="lblInfoNode"></label>
+						<label class="w3-label w3-padding-tiny"> with call </label>
+						<label class="w3-label" id="lblInfoCall"></label>
+						<select class="w3-select w3-border w3-padding-tiny" id="sel_port_list" hidden></select>
+						<div class="w3-row">
+							<table class="w3-table w3-border w3-bordered">
+								<thead>
+									<tr class="w3-light-grey">
+										<td>Port</td>
+										<td>Last Heard</td>
+										<td>% To</td>
+										<td>% From</td>
+									</tr>
+								</thead>
+								<tr class="w3-white">
+									<td><label class="w3-label" id="lblInfoPort1"></label></td>
+								</tr>
+								<tr class="w3-white">
+									<td><label class="w3-label" id="lblInfoPort2"></label></td>
+								</tr>
+								<tr class="w3-white">
+									<td><label class="w3-label" id="lblInfoPort3"></label></td>
+								</tr>
+								<tr class="w3-white">
+									<td><label class="w3-label" id="lblInfoPort4"></label></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="w3-row">
+						<div class="w3-third  w3-padding-tiny"></div>
+						<div class="w3-col" style="width:10px">&nbsp;</div>
+						<!--<div class="w3-col" style="width:60px"><button class="w3-btn w3-padding-tiny" id="btn_info_refresh">Refresh</button></div>-->
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
-	
-	<div class="w3-row">
-	    <div class="w3-twothird">
-	      <div class="w3-col w3-label w3-padding-tiny" style="width:85px">To Send:</div>
-	      <div class="w3-rest"><input type="text" autocomplete="off" class="w3-input w3-border w3-padding-tiny" id="txt_node_send"></div>
-	    </div>
-	    <div class="w3-third  w3-padding-tiny">
-	      <div class="w3-col" style="width:10px">&nbsp;</div>
-	      <div class="w3-col" style="width:50px"><button class="w3-btn w3-round-large w3-padding-tiny" id="btn_node_send">Send</button></div>
-	      <div class="w3-col" style="width:60px"><button class="w3-btn w3-round-large w3-padding-tiny" id="btn_node_clear">Clear</button></div>  
-	      <div class="w3-col" style="width:60px"><button class="w3-btn w3-round-large w3-padding-tiny" id="btn_node_reconnect">Reconnect</button></div>
-	  </div>   
-       </div>
-       </form>  
-      <!-- <div id="Monitor" class="w3-container w3-padding-tiny tarpnTab" style="display:none"> -->
-      <!--<form id="MonitorForm"> -->
-      <!--     <label class="w3-label w3-padding-tiny">Monitor Traffic</label> -->
-      <!--     <div class="w3-border w3-white w3-padding-tiny" id="txt_monitor"> -->
-    	<!--    All traffic appears here. -->
-    	<!-- </div> -->
-      <!--</form> -->
-      <!--<button class="w3-btn w3-round-large w3-padding-tiny" id="btn_monitor_clear">Clear</button> --> 
-      <!--</div> -->                
-   </div>
-</div>
-   <div class="w3-hide-small">
-      <table class="w3-table w3-border w3-bordered">
-	<thead><tr class="w3-light-grey"><td>Node</td><td>Call</td><td>Port 1</td><td>Port 2</td><td>Port 3</td><td>Port 4</td></tr></thead>
-	<tr>
-	    <td><label class="w3-label" id="lblNode"></label></td>
-	    <td><label class="w3-label" id="lblCall"></label></td>
-	    <td><label class="w3-label" id="lblPort1"></label></td>
-	    <td><label class="w3-label" id="lblPort2"></label></td>
-	    <td><label class="w3-label" id="lblPort3"></label></td>
-	    <td><label class="w3-label" id="lblPort4"></label></td>
-	</tr>
-      </table>
-   </div>   
-   <footer class="w3-center">
-     <p><nav>
-     <button class="w3-btn w3-round-large w3-padding-tiny" id="btnShutdown">Close App Server</button>
-     <span class="w3-hide-small w3-hide-medium" id="curTime" ></span>
-     <span class="w3-hide-small"><a href="http://tarpn.net/t/packet_radio_networking.html" target="_blank">TARPN</a> |
-     <a href="#" onclick="document.getElementById('about').style.display='block'">About</a> |</span> TARPN Home V1.12
-     <span class="w3-hide-small w3-hide-medium"> | <a href="mailto:nc4fgfin@gmail.com?Subject=TARPN%20Home" target="_blank">Feedback</a></span>
-     </nav></p>
-   </footer>
-   <div id="about" class="w3-modal">
-    <div class="w3-modal-content">
-      <header class="w3-container w3-green"> 
-        <span onclick="document.getElementById('about').style.display='none'" 
-        class="w3-closebtn">&times;</span>
-        <h3>About TARPN Home</h3>
-      </header>
-      <div class="w3-container">
-        <h4>About TARPN</h4>
-        <p>First and foremost, many thanks to the creator of TARPN: TADD, KA2DEW. His vision, foresight, and commitment 
-        to helping others learn is truly remarkable.</p>
-        <p>TARPN is a great way to learn about all aspects of ham radio, electronics, and computers. Learn more <a href="http://tarpn.net/t/packet_radio_networking.html" target="_blank">here</a>!</p>
-        <h4>TARPN Home</h4>
-        <p>This software is designed as a simple and useful interface to a TARPN node. It's 3 tabs each have a separate 
-        connection to the node, so you can use them independently. It should run in ANY browser running on the same 
-        Wi-fi as your node. Just enter the local ip address (ex: 192.168.x.xxx) of your node followed by :8085</p>
-        <p>The Node tab lets you enter node user commands. The Crowd tab lets you join the group chat. 
-        The Monitor tab lets you monitor node activity. All 3 tabs operate independently.</p>
-        <ul class="w3-ul w3-small">
-        <li><h4>Features</h4></li>
-        <li> -> Connect from any computer, phone, or tablet through Wi-fi</li>
-        <li> -> Shows traffic on all connected devices automatically</li>
-        <li> -> Beeps if crowd messages arrive after 5 minutes of inactivity</li>
-        <li> -> Beeps if crowd messages arrive and window is not focused</li>
-        <li> -> Maintains connection to the node even when web clients are gone</li>
-        </ul>
-        <ul class="w3-ul w3-small">
-        <li><h4>Current Bugs (unanticipated features)</h4></li>
-        <li> -> iPhone beep doesn't work yet</li>
-        </ul>
-        <ul class="w3-ul w3-small">
-        <li><h4>Change Log</h4></li>
-        <li> Version 1.0 (2/13/17):</li>
-	<li> -> Initial goodness</li>
-        <li> Version 1.2 (3/11/17):</li>
-	<li> -> Background keep-alive for Node and Crowd tabs</li>
-	<li> -> Reconnect button on Node and Crowd tabs</li>
-	<li> -> Removed Monitor tab until it works again</li>
-	<li> -> Fixed node tab CR issue</li>
-	<li> -> Added footer clock because I like it</li>
-        <li> Version 1.3 (3/12/17):</li>
-	<li> -> Fixed Crowd Keepalive to be invisible</li>
-        <li> Version 1.4 (5/8/17):</li>
-	<li> -> Fixed dependency on a router WAN connection</li>
-	<li> -> Made clicking on the logo open a new page showing TARPN web</li>
-        <li> Version 1.5 (7/24/17):</li>
-	<li> -> Read Node.ini for call sign and other vars. Used it to fix crowd keepalive</li>
-	<li> -> Added Info grid under main panels</li>
-	<li> -> Auto-resize text height as screen size changes</li>
-        <li> -> Crowd connection tracking</li>
-        <li> -> Store and retrieve chat history of the last 2000 chars when you connect with a browser</li>
-        <li> -> Colorize text based on source node/call (like bpqterm)</li>
-        <li> Version 1.6 (7/30/17):</li>
-        <li> -> Fixed color so it doesn't stop at 124 chars</li>
-        <li> -> Made crowd the first tab and turned off crowd echo</li>
-        <li> -> Added crowd and node sent boxes</li>
-        <li> -> Up arrow recalls previous commands</li>
-        <li> Version 1.7 (8/24/17):</li>
-        <li> -> Enabled Raspbian Stretch support</li>
-        <li> -> Tried to make colors bolder</li>
-        <li> -> Enabled hyperlinks in text</li>
-        <li> -> Moved Sent box up</li>
-        <li> Version 1.8 (9/30/17):</li>
-        <li> -> Changed sent box to a label</li>
-        <li> -> Changed Crowd keepalive</li>
-        <li> Version 1.9 (10/30/17):</li>
-        <li> -> Reverted Crowd keepalive</li>
-	<li> Version 1.10 (6/7/2018):</li>
-	<li> -> Manual Crowd keepalive. Getting silly.</li>
-	<li> -> Chat port state checking</li>
-	<li> -> Saving logs of chat and node text</li>
-	<li> Version 1.11 (6/7/2018):</li>
-	<li> -> Fixed responsiveness</li>
-	<li> Version 1.12 (6/10/2018):</li>
-	<li> -> Fixed incorrect 2-hour keepalive send</li>
-	<li> -> Trapped dropout of crowd or switch</li>
-	</ul>
-        <ul class="w3-ul w3-small">
-        <li><h4>Future plans</h4></li>
-        <li>Version 2+</li>
-        <li> -> Path to Crowd</li>
-        <li> -> Drop-down commands so you don't have to remember them</li>
-        <li> -> Smart knowledge of other nodes (including a map)</li>
-        <li> -> Click on another node to connect to it</li>
-        <li> -> Email interface with attachments</li>
-        <li> -> Node testing and stats</li>
-        <li> -> Other node connection tracking</li>
-        <li> -> Save the universe</li>
-    	</ul>
-        <h4>Updates</h4>
-        <p>TARPN Home software is developed by Fin, NC4FG as a lesson in Python, serial, websockets, 
-        Javascript, Jquery, and frustration. It is open source and all code is in Python, HTML, 
-        and Javascript. That means it is all readable and changeable on your node. But don't!
-        To make sure changes are effective and shared, I request that only one person modify and update it. 
-        Please send all comments, bug reports, and change requests to me at he feedback link on the main page.
-        I'll keep a list, prioritize, and ignore apropriately. Naw.</p>
-        <p>Also, wherever you go, well then there you are. But Home is where the heart is.</p>
-	<p>73, Fin, NC4FG</p>
-      </div>
-      <footer class="w3-container w3-green">
-        <a href="http://tarpn.net/t/packet_radio_networking.html" target="_blank">TARPN WEB</a>
-      </footer>
-    </div>
-  </div>
-<!-- END MAIN -->
-</div>
-<script>
+	<div class="w3-center w3-padding-small">
+		<div>
+			<nav class="w3-padding-tiny">
+				<button class="w3-btn w3-padding-tiny" id="btnShutdown">Reboot App Server</button>
+				<span class="w3-hide-small w3-hide-medium" id="curTime"></span>
+				<span class="w3-hide-small"><a href="http://tarpn.net/t/packet_radio_networking.html" target="_blank">TARPN</a> |
+					<a href="about.html" target="_blank">About</a> |
+					<a href="help.html" target="_blank">Help</a> |
+					<a href="#" onclick="document.getElementById('options').style.display='block'">Options</a> |</span> TARPN Home
+				V2.02
+			</nav>
+		</div>
+	</div>
+	<div id="options" class="w3-modal">
+		<div class="w3-modal-content w3-card w3-animate-zoom">
+			<div class="w3-modal-content">
+				<header class="w3-container w3-theme-med">
+					<span id="btn_quit_options" class="w3-btn w3-theme-med w3-small w3-display-topright">&times;</span>
+					<h4>Options</h4>
+				</header>
+				<div class="w3-container">
+					<div class="w3-section">
+						<div class="w3-row">
+							<div class="w3-half">
+								<label class="w3-label w3-small">Chat Alert Sound</label>
+								<select class="w3-label w3-small" id="selChatSound">
+									<option value="1">No Sound</option>
+									<option value="2">Sound on message after 5 minutes of inactivity</option>
+									<option value="3">Sound if inactive or screen has lost focus</option>
+									<option value="4">Sound on every message</option>
+								</select>
+								<label id="lblChatSoundBackup" style="display:none"></label>
+								<br><br>
+								<label class="w3-label w3-small">Chat Alert Visual</label>
+								<select class="w3-label w3-small" id="selChatVisual">
+									<option value="1">None</option>
+									<option value="2">Show on message after 5 minutes of inactivity</option>
+									<option value="3">Show if inactive or screen has lost focus</option>
+								</select>
+								<label id="lblChatVisualBackup" style="display:none"></label>
+								<br><br>
+								<label class="w3-label w3-small w3-padding-tiny" style="cursor:pointer">
+									<input id="chkIgnoreJoins" type="checkbox" checked="checked" class="w3-small" style="cursor:pointer">
+									Ignore Joins/Leaves
+								</label>
+								<br>
+								<label class="w3-label w3-small">Chat Sound File:</label>
+								<label id="lbl_chat_sound_file" class="w3-label w3-small">Default</label>
+								<label id="lbl_chat_sound_file_backup" style="display:none"></label>
+								<br>
+								<button id="btn_chat_sound_default" class="w3-label w3-small">Default</button>
+								<button id="btn_chat_sound_custom" class="w3-label w3-small">Custom</button>
+								<button id="btn_chat_sound_play" class="w3-label w3-small">Play</button>
+								<form id="frm_chat_sound_upload" enctype="multipart/form-data" action="/upload" method="post">
+									<input id="chat_sound_file_input" name="file_arg" type="file" accept="audio/*" style="display: none;"/>
+								</form>
+								<label id="lbl_chat_sound_bits" style="display: none;"></label>
+							</div>
+							<div class="w3-half">
+								<label class="w3-label w3-small w3-padding-tiny" style="cursor:pointer">
+									<input id="chkShowHints" type="checkbox" checked="checked" class="w3-small" style="cursor:pointer">
+									Show Hints
+								</label>
+								<br>
+								<label class="w3-label w3-small w3-padding-tiny" style="cursor:pointer">
+									<input id="chkShowCommands" type="checkbox" checked="checked" class="w3-small" style="cursor:pointer">
+									Show Commands
+								</label>
+								<br>
+								<label class="w3-label w3-small w3-padding-tiny" style="cursor:pointer">
+									<input id="chkUseBBS" type="checkbox" checked="checked" class="w3-small" style="cursor:pointer">
+									Use BBS
+								</label>
+								<br>
+								<label class="w3-label w3-small w3-padding-tiny" style="cursor:pointer">
+									<input id="chkIgnoreBBSKilled" type="checkbox" checked="checked" class="w3-small" style="cursor:pointer">
+									Ignore BBS Killed Messages
+								</label>
+								<br>
+								<label class="w3-label w3-small">BBS Sound File:</label>
+								<label id="lbl_bbs_sound_file" class="w3-label w3-small">Default</label>
+								<label id="lbl_bbs_sound_file_backup" style="display:none"></label>
+								<br>
+								<button id="btn_bbs_sound_default" class="w3-label w3-small">Default</button>
+								<button id="btn_bbs_sound_custom" class="w3-label w3-small">Custom</button>
+								<button id="btn_bbs_sound_play" class="w3-label w3-small">Play</button>
+								<form id="frm_bbs_sound_upload" enctype="multipart/form-data" action="/upload" method="post">
+									<input id="bbs_sound_file_input" name="file_arg" type="file" accept="audio/*" style="display: none;"/>
+								</form>
+								<label id="lbl_bbs_sound_bits" style="display: none;"></label>								
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="w3-row w3-border-top w3-padding-small w3-light-grey">
+					<div class="w3-col w3-right" style="width:60px"><button id="btn_save_options" class="w3-btn w3-padding-tiny">OK</button></div>
+					<div class="w3-col w3-right" style="width:60px"><button id="btn_cancel_options" class="w3-btn w3-padding-tiny w3-red">Cancel</button></div>
+					<div class="w3-col" style="width:10px">&nbsp;</div>
+					<div class="w3-col" style="width:90px"><button class="w3-btn w3-padding-tiny" id="btn_clear_logs">Clear Logs Now</button></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="bbs_compose" class="w3-modal">
+		<div class="w3-modal-content w3-card w3-animate-zoom">
+			<div class="w3-modal-content">
+				<header class="w3-container w3-theme-med">
+					<span id="btn_bbs_new_quit" class="w3-btn w3-theme-med w3-small w3-display-topright">&times;</span>
+					<h4>Compose <label id="lbl_bbs_new_action"></label>  Message</h4>
+				</header>
+				<div class="w3-container">
+					<div class="w3-section">
+						<div class="w3-row">
+							<label id="lbl_bbs_new_type" class="w3-label">Message Type:</label>
+							<select class="w3-select w3-border" id="sel_bbs_new_type">
+								<option value="P">Personal</option>
+								<option value="B">Bulletin</option>
+								<option value="T">NTS</option>
+							</select>
+							<br>
+							<label id="lbl_bbs_new_to" class="w3-label w3-padding-tiny">To:</label>
+							<input id="txt_bbs_new_to" type="text" class="w3-input w3-border">
+							<label id="lbl_bbs_new_subject" class="w3-label w3-padding-tiny">Subject:</label>
+							<input id="txt_bbs_new_subject" type="text" class="w3-input w3-border">
+							<label class="w3-label w3-padding-tiny">Message:</label>
+							<textarea id="txt_bbs_new_text" rows="10" cols="80" maxLength="2000" class="w3-input w3-border"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="w3-row w3-border-top w3-padding-4 w3-light-grey">
+					<div class="w3-col w3-right" style="width:60px">
+						<button id="btn_bbs_new_send" class="w3-btn w3-padding-tiny">Send</button>
+					</div>
+					<div class="w3-col w3-right" style="width:60px">
+						<button id="btn_bbs_new_cancel" class="w3-btn w3-padding-tiny w3-red">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END MAIN -->
+	<script>
 
-function resizeDivs(){
-    if ($(window).height() > 450) {
-        if ($(window).width() < 601) {
-            $("#topDiv").height( ($(window).height()-60) );
-	    $("#greyPanel").height( ($("#topDiv").height()-50) );
-	    $("#Node").height( ($("#greyPanel").height()-30) );
-	    $("#Crowd").height( ($("#greyPanel").height()-30) );
-        }
-        else if ($(window).width() < 960) {
-            $("#topDiv").height( ($(window).height()-110) );
-	    $("#greyPanel").height( ($("#topDiv").height()-120) );
-	    $("#Node").height( ($("#greyPanel").height()-30) );
-	    $("#Crowd").height( ($("#greyPanel").height()-30) );
-        }
-        else {
-            $("#topDiv").height( ($(window).height()-110) );
-	    $("#greyPanel").height( ($("#topDiv").height()-120) );
-	    $("#Node").height( ($("#greyPanel").height()-10) );
-	    $("#Crowd").height( ($("#greyPanel").height()-10) );
-        }
-	$("#txt_node").height( ($("#Node").height()-75) );
-	$("#txt_chat").height( ($("#Crowd").height()-75) );
-    }
-}
+		function resizeDivs() {
+			var intAdd = 0;
+			if (document.getElementById("chkShowCommands").checked == true) {
+				intAdd = 28;
+			}
+			if ($(window).height() > 450) {
+				if ($(window).width() < 577) {
+					$("#topDiv").height(($(window).height() - 125)); 
+					$("#greyPanel").height(($("#topDiv").height()));  
+					$("#Node").height(($("#greyPanel").height() - 50));
+					$("#Chat").height(($("#greyPanel").height() - 50));
+					$("#BBS").height(($("#greyPanel").height() - 80));
+					$("#Info").height(($("#greyPanel").height() - 80));
+				}
+				else if ($(window).width() < 770) {
+					$("#topDiv").height(($(window).height() - 125)); //was 110
+					$("#greyPanel").height(($("#topDiv").height() - 15)); //was 50
+					$("#Node").height(($("#greyPanel").height() - 30));
+					$("#Chat").height(($("#greyPanel").height() - 30));
+					$("#BBS").height(($("#greyPanel").height() - 30));
+					$("#Info").height(($("#greyPanel").height() - 30));
+				}
+				else {
+					$("#topDiv").height(($(window).height() - 125));  //was 110
+					$("#greyPanel").height(($("#topDiv").height() - 15)); //was 30
+					$("#Node").height(($("#greyPanel").height() - 10));
+					$("#Chat").height(($("#greyPanel").height() - 10));
+					$("#BBS").height(($("#greyPanel").height() - 10));
+					$("#Info").height(($("#greyPanel").height() - 10));
+				}
+				$("#txt_node").height(($("#Node").height() - 80 - intAdd)); 
+				$("#txt_chat").height(($("#Chat").height() - 80 - intAdd));
+				$("#txt_bbs_msg").height(($("#BBS").height()-380));
+				//$("#txt_Info").height( ($("#Info").height()-500) );
+			}
+		}
 
-window.onload = resizeDivs;
-window.onresize = resizeDivs;
+		window.onload = resizeDivs;
+		window.onresize = resizeDivs;
 
-function openTab(evt, tabName) {
-  var i, x, tablinks, textarea, myInput;
-  x = document.getElementsByClassName("tarpnTab");
-  for (i = 0; i < x.length; i++) {
-      x[i].style.display = "none";  // hide all tabs
-  }
-  tablinks = document.getElementsByClassName("tablink");
-  for (i = 0; i < x.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace(" w3-green", " w3-light-grey");
-  }
-  document.getElementById(tabName).style.display = "block"; //show the current tab
-  // scroll to bottom
-  if(tabName == "Node") {
-  	textarea = document.getElementById('txt_node');
-        myInput = document.getElementById('txt_node_send')
-  }
-  else if (tabName == "Crowd") {
-	textarea = document.getElementById('txt_chat');
-        myInput = document.getElementById('txt_chat_send')
-  }
-  else {
- 	textarea = document.getElementById('txt_monitor');
-        myInput = document.getElementById('txt_mon_send')
-  }
-  textarea.scrollTop = textarea.scrollHeight;
-  myInput.focus();
-  evt.currentTarget.className = evt.currentTarget.className.replace(" w3-light-grey"," w3-green");
-}
-// Get the modal
-var modal = document.getElementById('about');
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-var clockVar = setInterval(clockTimer ,1000); // 1 sec
-function clockTimer() {
-    var datCurTime = new Date();
-     document.getElementById("curTime").innerHTML = datCurTime.toLocaleTimeString() + " |";
-}
-</script>
+		var clockVar = setInterval(clockTimer, 1000); // 1 sec
+		function clockTimer() {
+			var datCurTime = new Date();
+			document.getElementById("curTime").innerHTML = datCurTime.toLocaleTimeString() + " |";
+		}
+	</script>
 </body>
+
 </html>

@@ -1,0 +1,134 @@
+<!--
+   help.html
+     
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<head>
+	<title>TARPN Home Help</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<style>
+     		.myMainColor {color:#fff!important;background-color:#0033cc!important}
+   	</style>
+ </head>
+
+<body>
+   <div id="help">
+      <header class="w3-container myMainColor"> 
+        <h3>TARPN Home Help</h3>
+      </header>
+      <div class="w3-container">
+       <h4>TARPN Home Tabs</h4>
+        <p>There are currently 4 tabs in TARPN Home. Each tab operates independently, so if you have an issue on one tab, you may not on another. Here are the details for each tab.</p>
+		<h4>Chat Tab</h4>        
+		<p>The Chat tab lets you enter join a group chat service. All users are connected together and everything you type can be seen by all chat users (unless you enter a private chat. See the "Commands" dropdown for syntax).<br>
+		Before you can chat, the tab must be connected to the Switch. The "SWITCH" control in the upper right does that. If it is green, you are ready to Join the chat.<br>
+		To join the chat, click the "Join" button in the lower right. If it is working, you should see a list of current users in the main "Chat Traffic" area. 
+		If you have the "Chatters" sidebar open, the sidebar will show you the current list of users. It will also show a status of Active (green), Idle (grey), or Away (red X). It also shows how long since someone typed something.
+		This list stays updated as users join and leave the group chat, even when you are not showing a web screen.<br>
+		If you close your browser and open it again, the latest chat messages and chatters list will show.<br>
+		<b>How to:</b><br>
+		<b>- Send a message:</b> Just type into the "To Send:" box at the bottom and press the "Enter" key or click the "Send" button.<br>
+		<b>- Recall a previous message:</b> press up arrow.<br>
+		<b>- Show that you are away from your keyboard:</b> Type the word "away" or "afk" and press "Enter" or click the "I'm Away" button. A red dot will appear next to your name in the Chatters list of all users. To turn off away mode, send any other message or click the "I'm Back" button.<br>
+		<b>- Clear the screen:</b> Click the "Clear" button. It does not clear the message log. Refreshing the browser will still recall previous messages.<br>
+		<b>- Leave the Chat:</b> Click the "Leave" button. It is the convention to stay in chat all the time and only leave when you will be off-site for a long time.<br>
+		<b>- Mute the chat alert sound:</b> Check the "Mute" checkbox in the upper right to override the chat alert sound option and mute the sound in the app.<br>
+		<b>- Show extra chat commands:</b> Select the "Show Commands" option and a dropdown will contain the commands.<br>
+		</p>
+		<h4>Node Tab</h4>        		
+        <p>
+		The Node tab lets you perform direct node commands. <br>
+		Before you can type commands, it must be connected to the Switch. The "SWITCH" control in the upper right should be green. If not, click it to make it green. Then you can enter commands.<br>
+		<b>How to:</b><br>
+		<b>- Send a node command:</b> Just type into the "To Send:" box at the bottom and press the "Enter" key or click the "Send" button.<br>
+		<b>- Recall a previous message:</b> press up arrow.<br>
+		<b>- Clear the screen:</b> Click the "Clear" button. It does not clear the command log. Refreshing the browser will still recall previous commands.<br>
+		<b>- Monitor node traffic:</b> Click the The "Monitor" checkbox in the upper right to turn on this feature.<br>
+		<b>- Show all node commands:</b> Select the "Show Commands" option and a dropdown will contain the commands.<br>
+		</p>
+		<h4>BBS Tab</h4>        		
+        <p>
+			The BBS tab lets you send persistent messages to other nodes in your network. This is effectively email over the radio!<br>
+			If there are any new messages (it checks every 2 minutes), a message count pops up in the upper right regardless of which tab you are on<br>
+			<br>
+			<b>Note:</b> for the BBS tab to work, it requires the following:<br>
+			1. The Welcome message (all levels) needs to have $x unread as the first characters.<br>
+			2. The Expert User prompt needs to start with "$x unread" and have characters that would usually not be in a message (Ex: $x unread~~>)<br>
+			To configure these, go to "http://ip_address_of_your_node:7777, click on "Mail Server Pages", log in as your call with password "p", click on "Welcome Msgs \& Prompts", make the changes, and Save. For more detailed instructions, go <a href="http://tarpn.net/t/builder/builders_bbs.html" target="_blank">Here</a><br> 
+			<br>
+			When you enter the BBS tab, a list of current BBS messages appears.<br>
+			Unread messages have a green background.<br>
+			If you click on a list item, it will be read and the contents displayed below the list. Also, the 3 buttons on the right will enable.<br>
+			<b>What the buttons do:</b><br>
+			<b>Compose:</b> Create and send a new message. The "To" should be call of the recipient (Ex: NC4FG)<br>
+			<b>Refresh:</b> Refresh the list of messages<br>
+			<b>Kill:</b> Kills the currently selected message.<br>
+			<b>Reply:</b> Reply to the currently selected message<br>
+			<b>Forward:</b> Forward the currently selected message. The "To" should be call of the recipient (Ex: NC4FG)<br>	
+			<b>Tip:</b> Housekeeping runs every night. It removes all Killed messages. If you don't want an email every time it runs, 
+			go into the Housekeeping page of the 7777 interface and select "Supress Mailing of Housekeeping Result". 
+			Also, to immediately hide killed messages, check the option in the TARPN Home Options to Ignore BBS Killed Messages.		
+		</p>
+		<h4>Info Tab</h4>        		
+        <p>
+			The Info Tab currently only shows your node call and name. In the future, it will show a bunch of node performance stats.
+		</p>
+        <h4>Options</h4>
+			The Options link at the bottom of the screen opens the Options box.<br>
+			<b>What each option does:</b><br>
+			<b>Chat Alert Sound:</b> select the level of beeping you want to hear<br>
+			<b>Chat Alert Visual:</b> Select the level of visual alert. When activated, the Chat tab top turns yellow. Click on the tab, chat text, or send box to turn the yellow off<br>
+			<b>Ignore Joins/Leaves:</b> People joining or leaving chat will not activate the sound or visual alerts<br>
+			<b>Chat Sound File:</b>Shows the chat alert sound file. "Default" means the default beep<br>
+			<b>Chat Default:</b>Sets the chat alert sound to the default beep<br>
+			<b>Chat Custom:</b>Lets you pick your own chat alert audio file<br>
+			<b>Chat Play:</b>Plays the current chat alert sound<br>			
+			<b>Show Hints:</b> Enables hints on the Chat tab to help you learn the system<br>
+			<b>Show Commands:</b> Enables the command bars underneath the "To Send" box on both Chat and Node tabs<br>
+			<b>Use BBS:</b> Enables the BBS tab<br>
+			<b>Ignore BBS Killed Messages:</b> Filters out BBS killed messages. Otherwise, they appear until the next BBS housekeeping (usually daily)<br>
+			<b>BBS Sound File:</b>Shows the BBS alert sound file. "Default" means the default ring<br>
+			<b>BBS Default:</b>Sets the BBS alert sound to the default ring<br>
+			<b>BBS Custom:</b>Lets you pick your own BBS alert audio file<br>
+			<b>BBS Play:</b>Plays the current BBS alert sound<br>
+			<b>Clear Logs Now:</b> This button will clear out the Chat and Node logs completely.
+        <p>
+        </p>
+        <h4>Troubleshooting</h4>
+        <p>
+			If you have a problem on the Chat or the Node tabs, here is the sequence to try and correct it. If one doesn't work, try the next:<br>
+			1. If in the Chat tab, try the "Leave" button and then "Join" again.<br>
+			2. Click the "SWITCH" slider in the upper right to turn it red, then again to turn it green. If in the Chat tab, click "Join".<br>
+			3. Click the "Reboot App Server" at the bottom to restart the back end of the server. Wait a minute and refresh the browser (Shift-F5).<br>
+			If none of these work, you may have deeper issues, so check your Raspberry Pi, TNCs, connections, etc.<br>
+			<br>
+			If you have a problem on the BBS tab, here is the sequence to try and correct it. If one doesn't work, try the next:<br>
+			1. Click the "Refresh" button to refresh the list.<br>
+			2. Click the Chat tab so you leave the BBS tab. Go back to the BBS tab.<br>
+			3. Refresh the browser window. I use "Shift F5".<br>
+			4. Make sure your 7777 page welcome message starts with "$x unread" and your expert prompt starts with "$x unread" and some unique text (ex:$x unread~~>). Reboot App Server after setting this.<br>
+			5. Click the "Reboot App Server" at the bottom to restart the back end of the server. Wait a minute and refresh the browser (Shift-F5).<br>
+        </p>
+        <h4>Debugging</h4>
+        <p>
+			If the troubleshooting steps above prove fruitless, there is a way to log every operation to the stdout log.<br>
+			1. Go to the Node tab<br>
+			2. Type debug! and press Enter. You should see a message saying debug has started.<br>
+			3. Go perform the operation that is failing.<br>
+			4. Go back to the Node tab and type debug! and Enter again to turn debugging off.<br>
+			5. Look in /var/log/tarpn_home_webapp_copylog.log to find the debug details.<br>
+			6. FOr help interpreting them, email just the part with the error to the link below.<br>
+        </p>
+        <h4>Final Word</h4>
+        If you still need help, email me <a href="mailto:nc4fgfin@gmail.com?Subject=TARPN%20Home" target="_blank">Here</a><br>
+        <p>Also, Wherever you go, well then there you are. But Home is where the heart is.</p>
+	<p>73, Fin, NC4FG</p>
+	</div>
+</body>
+
+</html>

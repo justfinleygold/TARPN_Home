@@ -1,0 +1,33 @@
+*************************************
+TARPN Home 2.0 Release Notes
+*************************************
+1. Please review the About and Help files for updates on what is new and how it works. Links are at the bottom of the app.
+
+2. Perform BEFORE running TARPN Home 2.0:
+  A. Stop the old TARPN Home.
+  B. Remove all files from the TARPN Home directory.
+  C. Run this to remove files from /home/pi:
+cd /home/pi
+rm TARPN_Home.ini
+rm tarpn-home-colors.json
+rm TARPN_Home_Chat.log
+rm TARPN_Home_Chat_Raw.log
+rm TARPN_Home_Node.log
+
+  D. Go into the 7777 mail pages. In the Welcome Msgs & Prompts, set the welcome message for all 3 levels to start with "$x unread". Set the Expert User prompt to start with "$x unread" and follow it with something usually not typed (like ~~>).
+
+  E. Copy all the TARPN Home V 2.0 files, directories, and subdirectories to the tarpn-home directory. 
+
+3. To run the app, the command line is now "python tarpn-home.pyc"
+
+****************************************
+TARPN Home 2.01 Release Notes
+****************************************
+1. Perform BEFORE running TARPN Home 2.01:
+  A. Stop the old TARPN Home.
+  B. Remove all files from the TARPN Home directory.
+  C. If you haven't installed V2.0 yet, make sure the Version 2.0 Step 2 C through E have been done.
+  D. Copy all the TARPN Home V 2.01 files, directories, and subdirectories to the tarpn-home directory. 
+
+2. Run the app the same as before by running "python tarpn-home.pyc"
+

@@ -1,0 +1,171 @@
+<!--
+    About TARPN Home     
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<head>
+	<title>About TARPN Home</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<style>
+     		.myMainColor {color:#fff!important;background-color:#0033cc!important}
+   	</style>
+ </head>
+
+<body>
+   <div id="about">
+      <header class="w3-container myMainColor"> 
+        <h3>About TARPN Home</h3>
+      </header>
+      <div class="w3-container">
+        <h4>About TARPN</h4>
+        <p>First and foremost, many thanks to the creator of TARPN: TADD, KA2DEW. His vision, foresight, and commitment 
+        to helping others learn is truly remarkable.</p>
+        <p>TARPN is a great way to learn about all aspects of ham radio, electronics, and computers. Learn more <a href="http://tarpn.net/t/packet_radio_networking.html" target="_blank">here</a>!</p>
+        <h4>TARPN Home</h4>
+        <p>This software is designed as a simple and useful interface to a TARPN node. It's 4 tabs each have a separate 
+        connection to the node, so you can use them independently. It should run in ANY browser running on the same 
+        Wi-fi as your node. Just enter the local ip address (ex: 192.168.x.xxx) of your node followed by :8085</p>
+        <p>The Chat tab lets you join the group chat. The Node tab lets you enter node user commands. 
+        The BBS tab lets you see, read, and send BBS messages. The Info tab lets you see node information.</p>
+        <ul class="w3-ul w3-small">
+        <li><h4>Features</h4></li>
+        <li> -> Connect from any computer, phone, or tablet through Wi-fi</li>
+        <li> -> Shows traffic on all connected devices automatically</li>
+        <li> -> Beeps if chat messages arrive after 5 minutes of inactivity</li>
+        <li> -> Beeps if chat messages arrive and window is not focused</li>
+        <li> -> Maintains connection to the node even when web clients are gone</li>
+        <li> -> Provides a simple interface to the node BBS</li>
+        </ul>
+        <ul class="w3-ul w3-small">
+        <li><h4>Current Bugs (unanticipated features)</h4></li>
+        <li> -> iPhone beep doesn't work yet</li>
+        <li> -> iPhone use may lock up the app server</li>
+        <li> -> Phone-sized formatting is terrible</li>
+        </ul>
+        <ul class="w3-ul w3-small">
+        <li><h4>Change Log</h4></li>
+        <li> Version 1.0 (2/13/17):</li>
+	<li> -> Initial goodness</li>
+        <li> Version 1.2 (3/11/17):</li>
+	<li> -> Background keep-alive for Node and Crowd tabs</li>
+	<li> -> Reconnect button on Node and Crowd tabs</li>
+	<li> -> Removed Monitor tab until it works again</li>
+	<li> -> Fixed node tab CR issue</li>
+	<li> -> Added footer clock because I like it</li>
+        <li> Version 1.3 (3/12/17):</li>
+	<li> -> Fixed Crowd Keepalive to be invisible</li>
+        <li> Version 1.4 (5/8/17):</li>
+	<li> -> Fixed dependency on a router WAN connection</li>
+	<li> -> Made clicking on the logo open a new page showing TARPN web</li>
+        <li> Version 1.5 (7/24/17):</li>
+	<li> -> Read Node.ini for call sign and other vars. Used it to fix crowd keepalive</li>
+	<li> -> Added Info grid under main panels</li>
+	<li> -> Auto-resize text height as screen size changes</li>
+        <li> -> Crowd connection tracking</li>
+        <li> -> Store and retrieve chat history of the last 2000 chars when you connect with a browser</li>
+        <li> -> Colorize text based on source node/call (like bpqterm)</li>
+        <li> Version 1.6 (7/30/17):</li>
+        <li> -> Fixed color so it doesn't stop at 124 chars</li>
+        <li> -> Made crowd the first tab and turned off crowd echo</li>
+        <li> -> Added crowd and node sent boxes</li>
+        <li> -> Up arrow recalls previous commands</li>
+        <li> Version 1.7 (8/24/17):</li>
+        <li> -> Enabled Raspbian Stretch support</li>
+        <li> -> Tried to make colors bolder</li>
+        <li> -> Enabled hyperlinks in text</li>
+        <li> -> Moved Sent box up</li>
+        <li> Version 1.8 (9/30/17):</li>
+        <li> -> Changed sent box to a label</li>
+        <li> -> Changed Crowd keepalive</li>
+        <li> Version 1.9 (10/30/17):</li>
+        <li> -> Reverted Crowd keepalive</li>
+	<li> Version 1.10 (6/7/2018):</li>
+	<li> -> Manual Crowd keepalive. Getting silly.</li>
+	<li> -> Chat port state checking</li>
+	<li> -> Saving logs of chat and node text</li>
+	<li> Version 1.11 (6/7/2018):</li>
+	<li> -> Fixed responsiveness</li>
+	<li> Version 1.12 (6/10/2018):</li>
+	<li> -> Fixed incorrect 2-hour keepalive send</li>
+	<li> -> Trapped dropout of crowd or switch</li>
+	<li> <b>Version 2.00 (1/10/2019):</b></li>
+	<li> -> SWITCH control on chat and node tabs for better state tracking</li>
+	<li> -> Chatters list that keeps up with joins/leaves</li>
+	<li> -> Mute checkbox</li>
+	<li> -> Typing "away" in chat puts an asterisk by your name in the chatters list. Any other chat text removes it.</li>
+    <li> -> Drop-down commands so you don't have to remember them</li>
+    <li> -> BBS tab for an email interface on top of the node BBS</li>
+    <li> -> BBS message indicator in upper right</li>
+    <li> -> Configurable BBS alert sound</li>
+    <li> -> Hints for new users</li>
+	<li> -> Options screen full of good stuff:</li>
+	<li> ->-->When to play the chat sound</li>
+	<li> ->-->When to show a chat visual</li>
+	<li> ->-->Ignore chat joins and leaves</li>
+	<li> ->-->Chat alert sound configuration</li>
+	<li> ->-->Show hints</li>
+	<li> ->-->Show command dropdowns</li>
+	<li> ->-->Use the BBS</li>
+	<li> ->-->Ignore BBS killed messages</li>
+	<li> ->-->BBS alert sound configuration</li>
+	<li> -> Help page</li>
+	<li> -> If you actually read this, try typing somewhere (not in chat)</li>
+	<li> -> the name of this project + the first 2 letters of Tadd's call</li>
+	<li> -> + the last 2 letters of my call.</li>
+	<li> -> Be cool and don't tell anyone else.</li>
+	<li> -> Gave the About page a separate page</li>
+	<li> -> 10,0000 characters saved on screen instead of 4,000</li>
+	<li> <b>Version 2.01 (2/17/2019):</b></li>
+    <li> Enhancements:</li>
+    <li> -> Add error checking and startup debug</li>
+	<li> -> Replace the away asterisk with something more obvious. Colored dots and times.</li>
+	<li> -> Add Away and Back control(s) for chat in addition to typing the commands </li>
+	<li> -> Add "N nodename"and "N T" to the nodes commands dropdown</li>
+	<li> -> Remove seldom/never used commands from the chat commands dropdown</li>
+	<li> -> Add a bugs and features list web page</li>
+	<li> -> Replace the BBS list local callsign with "Me" as applicable</li>
+	<li> -> Replace the BBS list date with "Today" if applicable</li>
+    <li> Squashed the following bugs:</li>
+	<li> -> Options screen "Play" default button on Safari doesn't work</li>
+	<li> -> Make In-line names (/shownames) in chat work correctly</li>
+	<li> -> Do a "my" on chat join to grab the correct call</li>
+	<li> -> For some people,&nbsp; the BBS list does not refresh when going to the BBS tab </li>
+	<li> -> BBS Bulletin doesn't show on the list at all, even after just sending one.</li>
+	<li> -> If no BBS list, change the text  that says "click on it" to "No list" </li>
+	<li> -> Change the chat command dropdown of /K to /Keep for keepalive.</li>
+	<li> -> For the /Keepalive chat command dropdown item, describe it as "Enable as needed".</li>
+	<li> -> The About page top section talks about old version</li>
+	<li> -> The Help page has an html error </li>
+	<li> -> Ignore the node tab keepalive on the chat tab </li>
+	<li> <b>Version 2.02 (2/18/2019):</b></li>
+    <li> Enhancements:</li>
+    <li> -> Changed the red dot to a red X</li>
+	<li> -> Added Version # to keepalive.</li>
+	</ul>
+        <ul class="w3-ul w3-small">
+        <li><h4>Future plans</h4></li>
+        <li>Version 2.1+</li>
+        <li> -> Better chat colors by ignoring BPQ colors</li>
+        <li> -> A version for mobile devices</li>
+        <li> -> Smart knowledge of other nodes (including a map)</li>
+        <li> -> Click on another node to connect to it</li>
+        <li> -> Node testing and stats</li>
+        <li> -> Other node connection tracking</li>
+        <li> -> Save the universe</li>
+    	</ul>
+        <h4>Updates</h4>
+        <p>TARPN Home software is developed by Fin, NC4FG as a lesson in Python, serial, websockets, 
+        Javascript, Jquery, and frustration. It is open source and all code is in Python, HTML, 
+        and Javascript. That means it is all readable and changeable on your node. But don't!
+        To make sure changes are effective and shared, I request that only one person modify and update it. 
+        Please send all comments, bug reports, and change requests to me at the feedback link on the help page.
+        I'll keep a list, prioritize, and ignore apropriately. Naw.</p>
+        <p>Also, wherever you go, well then there you are. But Home is where the heart is.</p>
+	<p>73, Fin, NC4FG</p>
+</body>
+
+</html>

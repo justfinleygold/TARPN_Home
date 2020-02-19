@@ -13,21 +13,16 @@ class SerialProcess(multiprocessing.Process):
         self.input_queue = input_queue
         self.output_queue = output_queue
         self.sp = serial.Serial(SERIAL_PORT + str(portNum), SERIAL_BAUDRATE, timeout=1)
-        
+
     def close(self):
+        global keepRunning
         keepRunning = False
         time.sleep(2)
         self.sp.close()
-        ##print ("Worker closed")
+        #print ("Worker closed")      
         
-    def writeSerial(self, data):
-        self.sp.write(data.encode())
-        time.sleep(1) 
-        
-    def readSerial(self):
-        return self.sp.readline()
- 
     def run(self):
+        global keepRunning
         #print ("Serial run")
         self.sp.flushInput()
         while keepRunning:
@@ -35,17 +30,20 @@ class SerialProcess(multiprocessing.Process):
             if not self.input_queue.empty():
                 data = self.input_queue.get()
                 # send it to the serial device
-                ##print ("Writing to serial: " + data)
-                self.writeSerial(data + "\r")
-	    else:
+                #print ("Writing to serial: " + data)
+                self.sp.write(data.encode()+ "\r")
+		time.sleep(1) 
+            else:
                 time.sleep(0.01)
   
             # look for incoming serial data
-            if (self.sp.inWaiting() > 0):
-                data = self.readSerial()
-                ##print ("Reading from serial: " + data)
-                # send it back to tornado
-                self.output_queue.put(data)
-            else:
-                time.sleep(0.01)
-
+            try:
+	        if (self.sp.inWaiting() > 0):
+		    data = self.sp.readline()
+		    #print ("Reading from serial: " + data + ', Trash:' + repr(self.strTrash))
+		    self.output_queue.put(data)
+	        else:
+		    time.sleep(0.01)
+            except:
+	        print ('Error reading serial port');
+                keepRunning = False

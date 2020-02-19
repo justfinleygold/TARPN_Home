@@ -1,0 +1,177 @@
+[
+  {
+    "Tier": "Node",
+    "Display": "? - Shows all node commands",
+    "Send": "?"
+  },
+  {
+    "Tier": "Node",
+    "Display": "BBS - Connect to the local BBS",
+    "Send": "BBS"
+  },
+  {
+    "Tier": "Node",
+    "Display": "(B)YE - Disconnect from the current node",
+    "Send": "B"
+  },
+  {
+    "Tier": "Node",
+    "Display": "CHAT - Connect to the chat room",
+    "Send": "CHAT"
+  },
+  {
+    "Tier": "Node",
+    "Display": "(C)ONNECT - Connect from this node to another node",
+    "Send": "C NodeName S"
+  },
+  {
+    "Tier": "Node",
+    "Display": "(I)NFO - Requests text INFO file from node",
+    "Send": "I"
+  },
+  {
+    "Tier": "Node",
+    "Display": "(L)INKS - Requests information about current ax.25 sessions",
+    "Send": "L"
+  },
+  {
+    "Tier": "Node",
+    "Display": "(M)HEARD - Monitor Heard -- Shows how long ago stations were heard by the node on a port",
+    "Send": "M PortNumber"
+  },
+  {
+    "Tier": "Node",
+    "Display": "MHL - Monitor Heard List-- Shows what local time stations were heard by the node on a port",
+    "Send": "MHL PortNumber"
+  },
+  {
+    "Tier": "Node",
+    "Display": "(N)ODES - Requests a list of all nodes known by this node",
+    "Send": "N"
+  },
+  {
+    "Tier": "Node",
+    "Display": "N Nodename - Shows the routes for the specified node",
+    "Send": "N Nodename"
+  },
+  {
+    "Tier": "Node",
+    "Display": "N T - Shows the round trip times and frame counts for all nodes with a non-zero count",
+    "Send": "N T"
+  },
+  {  
+    "Tier": "Node",
+    "Display": "PASSWORD - Requests access to password protected commands",
+    "Send": "PASSWORD"
+  },
+  {
+    "Tier": "Node",
+    "Display": "(P)ORTS - Requests list of ports (radios) configured for the node",
+    "Send": "P"
+  },
+  {
+    "Tier": "Node",
+    "Display": "(R)OUTES - Requests list of neighbor nodes for this node",
+    "Send": "R"
+  },
+  {
+    "Tier": "Node",
+    "Display": "ROUTES PERF - Shows route performance",
+    "Send": "R R"
+  },
+  {
+    "Tier": "Node",
+    "Display": "(S)TATS - Requests file of statistics for this node",
+    "Send": "S"
+  },
+  {
+    "Tier": "Node",
+    "Display": "(U)SERS -Requests list of stations connected into or through this node's command interpreter",
+    "Send": "U"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/help - Shows all Chat commands. Commands can be in upper or lower case",
+    "Send": "/help"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/U - Show Users",
+    "Send": "/U"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/N - Enter your Name. Or just /N to see the current name.",
+    "Send": "/N YourName"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/Q - Enter your QTH. Or just /Q to see the current QTH.",
+    "Send": "/Q YourQTH"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/T - Show Topics",
+    "Send": "/T"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/T Name - Join Topic or Create new Topic. Topic Names are not case sensitive",
+    "Send": "/T TopiceName"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/P - Show Ports and Links",
+    "Send": "/P"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/A - Toggle Alert on user join - Home recommends this be Enabled",
+    "Send": "/A"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/C - Toggle Colour Mode on or off. Home recommends this be Enabled",
+    "Send": "/C"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/E - Toggle Echo - Home recommends this be Enabled",
+    "Send": "/E"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/Keepalive - Toggle sending Keepalive messages every 10 minutes - Enable as necessary.",
+    "Send": "/Keep"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/ShowNames - Toggle displaying name as well as call on each message - Enable as desired.",
+    "Send": "/ShowNames"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/Time - Toggle displaying timestamp on each message - Home recommends this be Disabled",
+    "Send": "/Time"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/S CALL Text - Send Text to that station only",
+    "Send": "/S CALL YourText"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/F - Force all links to be made",
+    "Send": "/F"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/K - Show Known nodes",
+    "Send": "/K"
+  },
+  {
+    "Tier": "Chat",
+    "Display": "/QUIT - Leave Chat and disconnect from node. Same as Switch toggle.",
+    "Send": "/QUIT"
+  }
+]
